@@ -166,7 +166,7 @@ it('shows active banners on article page', function () {
     $bottomBanner = Banner::factory()->articleBottom()->create();
     Banner::factory()->inactive()->create();
 
-    $response = $this->get("/article/{$post->slug}");
+    $response = $this->get("/{$post->slug}");
 
     $response->assertOk()
         ->assertInertia(fn ($page) => $page

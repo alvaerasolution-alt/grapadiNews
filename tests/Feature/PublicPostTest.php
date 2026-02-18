@@ -14,7 +14,7 @@ it('loads the homepage successfully', function () {
 it('loads the article detail page for a published post', function () {
     $post = Post::factory()->published()->create();
 
-    $response = $this->get("/article/{$post->slug}");
+    $response = $this->get("/{$post->slug}");
 
     $response->assertOk();
 });
@@ -22,7 +22,7 @@ it('loads the article detail page for a published post', function () {
 it('returns 404 for a draft post', function () {
     $post = Post::factory()->create();
 
-    $response = $this->get("/article/{$post->slug}");
+    $response = $this->get("/{$post->slug}");
 
     $response->assertNotFound();
 });
@@ -30,9 +30,17 @@ it('returns 404 for a draft post', function () {
 it('increments the view count on article detail', function () {
     $post = Post::factory()->published()->create(['view_count' => 0]);
 
-    $this->get("/article/{$post->slug}");
+    $this->get("/{$post->slug}");
 
     expect($post->fresh()->view_count)->toBe(1);
+});
+
+it('redirects legacy article URL to new format', function () {
+    $post = Post::factory()->published()->create();
+
+    $response = $this->get("/article/{$post->slug}");
+
+    $response->assertRedirect("/{$post->slug}");
 });
 
 it('loads the category page successfully', function () {

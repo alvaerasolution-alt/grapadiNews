@@ -28,10 +28,10 @@ export default function SidebarTrending({ posts }: SidebarTrendingProps) {
                 {posts.map((post, index) => (
                     <li key={post.id}>
                         <Link
-                            href={`/article/${post.slug}`}
+                            href={`/${post.slug}`}
                             className="group flex gap-3"
                         >
-                            <span className="text-xl font-extrabold leading-tight text-amber-600/30">
+                            <span className="text-xl leading-tight font-extrabold text-amber-600/30">
                                 {String(index + 1).padStart(2, '0')}
                             </span>
                             <div className="flex min-w-0 flex-col gap-0.5">

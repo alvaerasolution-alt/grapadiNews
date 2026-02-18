@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Category;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -65,6 +66,7 @@ class HandleInertiaRequests extends Middleware
                     'category_sidebar' => Setting::get('google_ad_slot_category_sidebar'),
                 ],
             ],
+            'navCategories' => cache()->remember('nav_categories', 3600, fn () => Category::orderBy('name')->get(['id', 'name', 'slug'])),
         ];
     }
 }

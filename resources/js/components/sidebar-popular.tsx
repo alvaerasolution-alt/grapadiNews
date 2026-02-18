@@ -29,7 +29,7 @@ export default function SidebarPopular({ posts }: SidebarPopularProps) {
                 {posts.map((post) => (
                     <Link
                         key={post.id}
-                        href={`/article/${post.slug}`}
+                        href={`/${post.slug}`}
                         className="group flex gap-3"
                     >
                         {post.featured_image ? (

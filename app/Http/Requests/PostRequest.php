@@ -3,7 +3,9 @@
 namespace App\Http\Requests;
 
 use App\Enums\PostStatus;
+use App\Models\Post;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rule;
 
 class PostRequest extends FormRequest
@@ -22,7 +24,7 @@ class PostRequest extends FormRequest
         }
 
         return [
-            'title' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255', $this->reservedSlugRule()],
             'excerpt' => ['nullable', 'string', 'max:500'],
             'body' => ['required', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
@@ -33,5 +35,29 @@ class PostRequest extends FormRequest
             'tags' => ['nullable', 'array'],
             'tags.*' => ['exists:tags,id'],
         ];
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function messages(): array
+    {
+        return [
+            'title.not_reserved_slug' => 'This title generates a URL that conflicts with system routes. Please choose a different title.',
+        ];
+    }
+
+    /**
+     * Validation rule to prevent titles that generate reserved slugs.
+     */
+    protected function reservedSlugRule(): \Closure
+    {
+        return function (string $attribute, mixed $value, \Closure $fail): void {
+            $slug = Str::slug($value);
+
+            if (Post::isReservedSlug($slug)) {
+                $fail('title.not_reserved_slug');
+            }
+        };
     }
 }

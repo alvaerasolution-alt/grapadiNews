@@ -10,18 +10,6 @@ import {
     SheetTrigger,
 } from '@/components/ui/sheet';
 
-const categories = [
-    { name: 'Home', href: '/' },
-    { name: 'News', href: '/category/news' },
-    { name: 'Business', href: '/category/business' },
-    { name: 'Sport', href: '/category/sport' },
-    { name: 'Tech', href: '/category/tech' },
-    { name: 'Life', href: '/category/life' },
-    { name: 'Health', href: '/category/health' },
-    { name: 'Opinion', href: '/category/opinion' },
-    { name: 'Education', href: '/category/education' },
-];
-
 interface SearchResult {
     id: number;
     title: string;
@@ -92,7 +80,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 
     const navigateToArticle = (slug: string) => {
         onClose();
-        router.visit(`/article/${slug}`);
+        router.visit(`/${slug}`);
     };
 
     return (
@@ -197,7 +185,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 }
 
 export default function PublicHeader() {
-    const { auth } = usePage().props;
+    const { auth, navCategories } = usePage().props;
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -275,10 +263,20 @@ export default function PublicHeader() {
                                         </Link>
                                     </div>
                                     <nav className="space-y-1 p-4">
-                                        {categories.map((cat) => (
+                                        <Link
+                                            href="/"
+                                            className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-amber-400"
+                                            onClick={() =>
+                                                setIsMobileMenuOpen(false)
+                                            }
+                                        >
+                                            Home
+                                        </Link>
+                                        {navCategories.map((cat) => (
                                             <Link
-                                                key={cat.name}
-                                                href={cat.href}
+                                                key={cat.id}
+                                                href={`/category/${cat.slug}`}
+                                                prefetch
                                                 className="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-amber-400"
                                                 onClick={() =>
                                                     setIsMobileMenuOpen(false)
@@ -343,10 +341,18 @@ export default function PublicHeader() {
 
                     {/* Center: Desktop category nav */}
                     <nav className="hidden lg:flex lg:items-center lg:gap-1">
-                        {categories.map((cat) => (
+                        <Link
+                            href="/"
+                            prefetch
+                            className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-400 transition-colors hover:text-amber-400"
+                        >
+                            Home
+                        </Link>
+                        {navCategories.map((cat) => (
                             <Link
-                                key={cat.name}
-                                href={cat.href}
+                                key={cat.id}
+                                href={`/category/${cat.slug}`}
+                                prefetch
                                 className="rounded-md px-3 py-1.5 text-sm font-medium text-gray-400 transition-colors hover:text-amber-400"
                             >
                                 {cat.name}
@@ -407,10 +413,18 @@ export default function PublicHeader() {
                         ref={categoryScrollRef}
                         className="scrollbar-none flex gap-1 overflow-x-auto px-4 py-2"
                     >
-                        {categories.map((cat) => (
+                        <Link
+                            href="/"
+                            prefetch
+                            className="shrink-0 rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-gray-400 hover:bg-amber-600/20 hover:text-amber-400"
+                        >
+                            Home
+                        </Link>
+                        {navCategories.map((cat) => (
                             <Link
-                                key={cat.name}
-                                href={cat.href}
+                                key={cat.id}
+                                href={`/category/${cat.slug}`}
+                                prefetch
                                 className="shrink-0 rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-gray-400 hover:bg-amber-600/20 hover:text-amber-400"
                             >
                                 {cat.name}

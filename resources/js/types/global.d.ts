@@ -1,4 +1,5 @@
 import type { Auth } from '@/types/auth';
+import type { Category } from '@/types/app';
 
 declare module '@inertiajs/core' {
     export interface InertiaConfig {
@@ -10,6 +11,7 @@ declare module '@inertiajs/core' {
                 success: string | null;
                 error: string | null;
             };
+            navCategories: Category[];
             [key: string]: unknown;
         };
     }

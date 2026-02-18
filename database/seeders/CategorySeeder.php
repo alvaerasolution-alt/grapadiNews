@@ -14,14 +14,13 @@ class CategorySeeder extends Seeder
     public function run(): void
     {
         $categories = [
-            ['name' => 'News', 'description' => 'Berita terkini dan informasi terbaru'],
-            ['name' => 'Business', 'description' => 'Berita bisnis, ekonomi, dan keuangan'],
-            ['name' => 'Sport', 'description' => 'Berita olahraga dan kompetisi'],
+            ['name' => 'Market', 'description' => 'Berita pasar modal, saham, dan investasi'],
+            ['name' => 'Bisnis', 'description' => 'Berita bisnis, perusahaan, dan industri'],
+            ['name' => 'Finansial', 'description' => 'Keuangan, perbankan, dan ekonomi'],
             ['name' => 'Tech', 'description' => 'Teknologi, gadget, dan inovasi digital'],
-            ['name' => 'Life', 'description' => 'Gaya hidup, tips, dan inspirasi'],
-            ['name' => 'Health', 'description' => 'Kesehatan, kebugaran, dan wellness'],
-            ['name' => 'Opinion', 'description' => 'Opini, analisis, dan kolom editorial'],
-            ['name' => 'Education', 'description' => 'Pendidikan, riset, dan pengembangan ilmu'],
+            ['name' => 'Insight', 'description' => 'Analisis mendalam dan laporan khusus'],
+            ['name' => 'Lifestyle', 'description' => 'Gaya hidup, travel, dan kuliner'],
+            ['name' => 'Opini', 'description' => 'Opini, kolom, dan sudut pandang'],
         ];
 
         foreach ($categories as $category) {

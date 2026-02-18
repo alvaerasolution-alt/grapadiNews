@@ -24,9 +24,11 @@ Route::post('/banners/{banner}/click', BannerClickController::class)->name('bann
 
 // Public pages
 Route::get('/', [PublicPostController::class, 'index'])->name('home');
-Route::get('/article/{post:slug}', [PublicPostController::class, 'show'])->name('article.show');
 Route::get('/category/{category:slug}', [PublicCategoryController::class, 'show'])->name('category.show');
 Route::get('/search', [SearchController::class, 'search'])->name('search');
+
+// Legacy redirect: /article/{slug} -> /{slug} (301 for SEO)
+Route::get('/article/{slug}', fn (string $slug) => redirect("/{$slug}", 301));
 
 // Contributor dashboard
 Route::get('dashboard', [DashboardController::class, 'index'])
@@ -78,3 +80,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])
     });
 
 require __DIR__.'/settings.php';
+
+// Fallback route: Article show (must be last to avoid conflicts with other routes)
+Route::get('/{post:slug}', [PublicPostController::class, 'show'])->name('article.show');

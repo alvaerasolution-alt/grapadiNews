@@ -7,12 +7,15 @@ use App\Enums\PostStatus;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Post;
+use App\Services\UnsplashService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PublicPostController extends Controller
 {
+    public function __construct(private UnsplashService $unsplashService) {}
+
     public function index(Request $request): Response
     {
         $featuredPosts = Post::query()
@@ -63,17 +66,22 @@ class PublicPostController extends Controller
             ->take(3)
             ->get();
 
-        $categoryPosts = $topCategories->map(function (Category $category) {
+        $categoryIds = $topCategories->pluck('id');
+        $postsByCategory = Post::query()
+            ->published()
+            ->whereIn('category_id', $categoryIds)
+            ->with(['user:id,name', 'category:id,name,slug'])
+            ->latest('published_at')
+            ->get()
+            ->groupBy('category_id');
+
+        $categoryPosts = $topCategories->map(function (Category $category) use ($postsByCategory) {
             return [
                 'id' => $category->id,
                 'name' => $category->name,
                 'slug' => $category->slug,
-                'posts' => $category->posts()
-                    ->where('status', PostStatus::Published)
-                    ->with(['user:id,name', 'category:id,name,slug'])
-                    ->latest('published_at')
+                'posts' => $postsByCategory->get($category->id, collect())
                     ->take(5)
-                    ->get()
                     ->map(fn (Post $post) => $this->formatPostCard($post)),
             ];
         });
@@ -145,10 +153,10 @@ class PublicPostController extends Controller
                 'slug' => $post->slug,
                 'excerpt' => $post->excerpt,
                 'body' => $post->body,
-                'featured_image' => $post->featured_image,
+                'featured_image' => $this->resolvePostImage($post),
                 'meta_title' => $post->meta_title ?: $post->title,
                 'meta_description' => $post->meta_description ?: $post->excerpt,
-                'og_image' => $post->og_image ?: $post->featured_image,
+                'og_image' => ($post->og_image ?: $this->resolvePostImage($post)),
                 'view_count' => $post->view_count,
                 'published_at' => $post->published_at?->toISOString(),
                 'published_at_human' => $post->published_at?->diffForHumans(),
@@ -194,9 +202,23 @@ class PublicPostController extends Controller
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
+    private function resolvePostImage(Post $post): ?string
+    {
+        // 1. Use manual featured image if set
+        if (! empty($post->featured_image)) {
+            return $post->featured_image;
+        }
+
+        // 2. Use persisted Unsplash URL if set
+        if (! empty($post->unsplash_image_url)) {
+            return $post->unsplash_image_url;
+        }
+
+        // 3. Return placeholder instead of blocking API call
+        // Async image fetching should be handled by a queue job
+        return null;
+    }
+
     private function formatPostCard(Post $post): array
     {
         return [
@@ -204,7 +226,7 @@ class PublicPostController extends Controller
             'title' => $post->title,
             'slug' => $post->slug,
             'excerpt' => $post->excerpt,
-            'featured_image' => $post->featured_image,
+            'featured_image' => $this->resolvePostImage($post),
             'view_count' => $post->view_count,
             'published_at' => $post->published_at?->toISOString(),
             'published_at_human' => $post->published_at?->diffForHumans(),

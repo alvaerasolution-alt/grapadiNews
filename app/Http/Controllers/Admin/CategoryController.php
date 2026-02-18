@@ -32,6 +32,8 @@ class CategoryController extends Controller
     {
         Category::create($request->validated());
 
+        cache()->forget('nav_categories');
+
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category created successfully.');
     }
@@ -47,6 +49,8 @@ class CategoryController extends Controller
     {
         $category->update($request->validated());
 
+        cache()->forget('nav_categories');
+
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category updated successfully.');
     }
@@ -59,6 +63,8 @@ class CategoryController extends Controller
         }
 
         $category->delete();
+
+        cache()->forget('nav_categories');
 
         return redirect()->route('admin.categories.index')
             ->with('success', 'Category deleted successfully.');

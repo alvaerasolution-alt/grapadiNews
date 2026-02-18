@@ -60,7 +60,7 @@ interface Props {
 function ArticleCard({ post }: { post: PostCard }) {
     return (
         <Link
-            href={`/article/${post.slug}`}
+            href={`/${post.slug}`}
             className="group flex flex-col overflow-hidden rounded-xl border border-gray-800 bg-[#1A1A1A] transition-shadow hover:shadow-lg hover:shadow-black/30"
         >
             <div className="aspect-video overflow-hidden bg-gray-800">
@@ -105,7 +105,7 @@ function ArticleCard({ post }: { post: PostCard }) {
 function CompactArticleCard({ post }: { post: PostCard }) {
     return (
         <Link
-            href={`/article/${post.slug}`}
+            href={`/${post.slug}`}
             className="group flex gap-4 rounded-lg border border-gray-800/60 bg-[#1A1A1A] p-3 transition-colors hover:bg-white/5"
         >
             <div className="h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-gray-800 sm:h-24 sm:w-36">
@@ -184,7 +184,7 @@ export default function Home({
                     <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
                         {/* Main hero card */}
                         <Link
-                            href={`/article/${hero.slug}`}
+                            href={`/${hero.slug}`}
                             className="group relative overflow-hidden rounded-xl lg:col-span-3"
                         >
                             <div className="aspect-[16/9] lg:aspect-auto lg:h-full lg:min-h-[420px]">
@@ -222,7 +222,7 @@ export default function Home({
                             {sideFeatures.map((post) => (
                                 <Link
                                     key={post.id}
-                                    href={`/article/${post.slug}`}
+                                    href={`/${post.slug}`}
                                     className="group relative overflow-hidden rounded-xl"
                                 >
                                     <div className="aspect-[4/3]">
@@ -302,29 +302,29 @@ export default function Home({
                         {/* Pagination */}
                         {(latestPosts.prev_page_url ||
                             latestPosts.next_page_url) && (
-                                <div className="mt-8 flex items-center justify-between">
-                                    {latestPosts.prev_page_url ? (
-                                        <Link
-                                            href={latestPosts.prev_page_url}
-                                            className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-white/5"
-                                        >
-                                            &larr; Previous
-                                        </Link>
-                                    ) : (
-                                        <span />
-                                    )}
-                                    {latestPosts.next_page_url ? (
-                                        <Link
-                                            href={latestPosts.next_page_url}
-                                            className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-white/5"
-                                        >
-                                            Next &rarr;
-                                        </Link>
-                                    ) : (
-                                        <span />
-                                    )}
-                                </div>
-                            )}
+                            <div className="mt-8 flex items-center justify-between">
+                                {latestPosts.prev_page_url ? (
+                                    <Link
+                                        href={latestPosts.prev_page_url}
+                                        className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-white/5"
+                                    >
+                                        &larr; Previous
+                                    </Link>
+                                ) : (
+                                    <span />
+                                )}
+                                {latestPosts.next_page_url ? (
+                                    <Link
+                                        href={latestPosts.next_page_url}
+                                        className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-white/5"
+                                    >
+                                        Next &rarr;
+                                    </Link>
+                                ) : (
+                                    <span />
+                                )}
+                            </div>
+                        )}
                     </div>
 
                     {/* Trending Sidebar */}
@@ -350,13 +350,14 @@ export default function Home({
                                     {trendingPosts.map((post, index) => (
                                         <li key={post.id}>
                                             <Link
-                                                href={`/article/${post.slug}`}
+                                                href={`/${post.slug}`}
                                                 className="group flex gap-3"
                                             >
                                                 <span className="text-2xl font-extrabold text-amber-600/30">
-                                                    {String(
-                                                        index + 1,
-                                                    ).padStart(2, '0')}
+                                                    {String(index + 1).padStart(
+                                                        2,
+                                                        '0',
+                                                    )}
                                                 </span>
                                                 <div className="flex flex-col gap-1">
                                                     <h4 className="line-clamp-2 text-sm font-semibold text-gray-200 group-hover:text-amber-400">
@@ -364,10 +365,7 @@ export default function Home({
                                                     </h4>
                                                     {post.category && (
                                                         <span className="text-xs text-gray-500">
-                                                            {
-                                                                post.category
-                                                                    .name
-                                                            }
+                                                            {post.category.name}
                                                         </span>
                                                     )}
                                                 </div>
@@ -405,13 +403,16 @@ export default function Home({
                                 {/* Left: Featured card for this category */}
                                 {cat.posts[0] && (
                                     <Link
-                                        href={`/article/${cat.posts[0].slug}`}
+                                        href={`/${cat.posts[0].slug}`}
                                         className="group relative overflow-hidden rounded-xl"
                                     >
                                         <div className="aspect-[16/10]">
                                             {cat.posts[0].featured_image ? (
                                                 <img
-                                                    src={cat.posts[0].featured_image}
+                                                    src={
+                                                        cat.posts[0]
+                                                            .featured_image
+                                                    }
                                                     alt={cat.posts[0].title}
                                                     loading="lazy"
                                                     decoding="async"
@@ -432,8 +433,12 @@ export default function Home({
                                                 {cat.posts[0].title}
                                             </h3>
                                             <p className="text-xs text-white/70">
-                                                {cat.posts[0].author.name} &middot;{' '}
-                                                {cat.posts[0].published_at_human}
+                                                {cat.posts[0].author.name}{' '}
+                                                &middot;{' '}
+                                                {
+                                                    cat.posts[0]
+                                                        .published_at_human
+                                                }
                                             </p>
                                         </div>
                                     </Link>

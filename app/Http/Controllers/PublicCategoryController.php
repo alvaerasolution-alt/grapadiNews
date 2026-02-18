@@ -7,12 +7,15 @@ use App\Enums\PostStatus;
 use App\Models\Banner;
 use App\Models\Category;
 use App\Models\Post;
+use App\Services\UnsplashService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PublicCategoryController extends Controller
 {
+    public function __construct(private UnsplashService $unsplashService) {}
+
     public function show(Request $request, Category $category): Response
     {
         $posts = Post::query()
@@ -27,7 +30,7 @@ class PublicCategoryController extends Controller
                 'title' => $post->title,
                 'slug' => $post->slug,
                 'excerpt' => $post->excerpt,
-                'featured_image' => $post->featured_image,
+                'featured_image' => $this->resolvePostImage($post),
                 'view_count' => $post->view_count,
                 'published_at' => $post->published_at?->toISOString(),
                 'published_at_human' => $post->published_at?->diffForHumans(),
@@ -51,5 +54,22 @@ class PublicCategoryController extends Controller
             'topBanners' => Banner::forSlot(BannerPosition::CategoryTop),
             'sidebarBanners' => Banner::forSlot(BannerPosition::CategorySidebar),
         ]);
+    }
+
+    private function resolvePostImage(Post $post): ?string
+    {
+        // 1. Use manual featured image if set
+        if (! empty($post->featured_image)) {
+            return $post->featured_image;
+        }
+
+        // 2. Use persisted Unsplash URL if set
+        if (! empty($post->unsplash_image_url)) {
+            return $post->unsplash_image_url;
+        }
+
+        // 3. Return placeholder instead of blocking API call
+        // Async image fetching should be handled by a queue job
+        return null;
     }
 }

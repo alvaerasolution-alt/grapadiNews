@@ -69,7 +69,7 @@ interface Props {
 
 function RelatedArticleCard({ post }: { post: PostCard }) {
     return (
-        <Link href={`/article/${post.slug}`} className="group flex gap-3 py-3">
+        <Link href={`/${post.slug}`} className="group flex gap-3 py-3">
             {post.featured_image ? (
                 <img
                     src={post.featured_image}
@@ -106,8 +106,8 @@ export default function PostShow({
 
     const articleUrl =
         typeof window !== 'undefined'
-            ? `${window.location.origin}/article/${post.slug}`
-            : `/article/${post.slug}`;
+            ? `${window.location.origin}/${post.slug}`
+            : `/${post.slug}`;
 
     const jsonLd = createBlogPostingJsonLd({
         title: post.title,
@@ -221,8 +221,7 @@ export default function PostShow({
                                 </div>
                             </div>
 
-                            {/* Social Share */}
-                            <SocialShare url={articleUrl} title={post.title} />
+
                         </header>
 
                         {/* Featured Image */}

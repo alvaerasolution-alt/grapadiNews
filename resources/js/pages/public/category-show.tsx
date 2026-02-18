@@ -42,7 +42,7 @@ interface Props {
 function ArticleCard({ post }: { post: PostCard }) {
     return (
         <Link
-            href={`/article/${post.slug}`}
+            href={`/${post.slug}`}
             className="group flex flex-col overflow-hidden rounded-xl border border-gray-800 bg-[#1A1A1A] transition-shadow hover:shadow-lg hover:shadow-black/30"
         >
             <div className="aspect-video overflow-hidden bg-gray-800">
@@ -191,17 +191,19 @@ export default function CategoryShow({
                                         <Link
                                             key={cat.id}
                                             href={`/category/${cat.slug}`}
-                                            className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${cat.slug === category.slug
-                                                ? 'bg-amber-900/40 font-semibold text-amber-400'
-                                                : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
-                                                }`}
+                                            className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${
+                                                cat.slug === category.slug
+                                                    ? 'bg-amber-900/40 font-semibold text-amber-400'
+                                                    : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                                            }`}
                                         >
                                             <span>{cat.name}</span>
                                             <span
-                                                className={`text-xs ${cat.slug === category.slug
-                                                    ? 'text-amber-500'
-                                                    : 'text-gray-600'
-                                                    }`}
+                                                className={`text-xs ${
+                                                    cat.slug === category.slug
+                                                        ? 'text-amber-500'
+                                                        : 'text-gray-600'
+                                                }`}
                                             >
                                                 {cat.posts_count}
                                             </span>

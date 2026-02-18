@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Concerns\HasSlug;
 use App\Enums\PostStatus;
+use App\Observers\PostObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +27,7 @@ class Post extends Model
         'excerpt',
         'body',
         'featured_image',
+        'unsplash_image_url',
         'status',
         'meta_title',
         'meta_description',
