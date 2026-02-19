@@ -234,13 +234,6 @@ export default function Home({
                 </section>
             )}
 
-            {/* Ad: Below Hero */}
-            <AdSlot
-                banners={heroBelowBanners}
-                layout="horizontal"
-                mgidWidgetKey="home_hero_below"
-                className="mx-auto mt-6 max-w-7xl px-4"
-            />
 
             {/* Latest Articles + Trending Sidebar */}
             <section className="mx-auto max-w-7xl px-4 py-8">
@@ -430,16 +423,6 @@ export default function Home({
                                     ))}
                                 </div>
                             </div>
-
-                            {/* Ad between sections (not after last) */}
-                            {catIndex < categoryPosts.length - 1 && (
-                                <AdSlot
-                                    banners={homeMidBanners}
-                                    layout="inline"
-                                    mgidWidgetKey="home_mid_section"
-                                    className="my-8"
-                                />
-                            )}
 
                             {/* Spacer for last section */}
                             {catIndex === categoryPosts.length - 1 && (

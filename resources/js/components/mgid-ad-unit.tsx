@@ -42,8 +42,12 @@ export default function MgidAdUnit({
     if (!siteId || !widgetId) return null;
 
     return (
-        <div className={className}>
-            <div ref={containerRef} />
+        <div className={`relative overflow-hidden rounded-xl ${className}`} style={{ maxHeight: '420px' }}>
+            <div
+                ref={containerRef}
+                className="overflow-hidden"
+                style={{ maxHeight: '420px' }}
+            />
         </div>
     );
 }

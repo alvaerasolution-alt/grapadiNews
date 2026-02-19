@@ -79,7 +79,7 @@ class PostController extends Controller
      */
     public function edit(Post $post): Response
     {
-        $this->authorize('update', $post);
+        abort_if($post->user_id !== auth()->id(), 403);
 
         $post->load('tags');
 
@@ -95,7 +95,7 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
-        $this->authorize('update', $post);
+        abort_if($post->user_id !== auth()->id(), 403);
 
         $data = $request->validated();
 
@@ -128,7 +128,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        $this->authorize('delete', $post);
+        abort_if($post->user_id !== auth()->id(), 403);
 
         ImageHelper::delete($post->featured_image);
 
