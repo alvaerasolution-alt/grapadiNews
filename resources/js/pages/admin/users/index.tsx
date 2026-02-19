@@ -138,29 +138,17 @@ export default function AdminUsersIndex({
                     <CardHeader>
                         <CardTitle>All Users ({users.total})</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <div className="rounded-md border">
-                            <table className="w-full text-sm">
+                    <CardContent className="p-0">
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[480px] text-sm">
                                 <thead className="bg-muted/50 [&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50">
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Name
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Email
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Role
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Posts
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Points
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Joined
-                                        </th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Name</th>
+                                        <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground sm:table-cell">Email</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Role</th>
+                                        <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground md:table-cell">Posts</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Points</th>
+                                        <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground lg:table-cell">Joined</th>
                                     </tr>
                                 </thead>
                                 <tbody className="[&_tr:last-child]:border-0">
@@ -170,39 +158,24 @@ export default function AdminUsersIndex({
                                                 key={user.id}
                                                 className="border-b transition-colors hover:bg-muted/50"
                                             >
-                                                <td className="p-4 align-middle font-medium">
-                                                    {user.name}
-                                                </td>
-                                                <td className="p-4 align-middle text-muted-foreground">
-                                                    {user.email}
-                                                </td>
+                                                <td className="p-4 align-middle font-medium">{user.name}</td>
+                                                <td className="hidden p-4 align-middle text-muted-foreground sm:table-cell">{user.email}</td>
                                                 <td className="p-4 align-middle">
                                                     <div className="flex flex-wrap gap-1">
-                                                        {user.roles.map(
-                                                            (role) => (
-                                                                <Badge
-                                                                    key={role}
-                                                                    variant="secondary"
-                                                                >
-                                                                    {role}
-                                                                </Badge>
-                                                            ),
-                                                        )}
+                                                        {user.roles.map((role) => (
+                                                            <Badge key={role} variant="secondary">{role}</Badge>
+                                                        ))}
                                                     </div>
                                                 </td>
-                                                <td className="p-4 align-middle text-muted-foreground">
-                                                    {user.posts_count}
-                                                </td>
+                                                <td className="hidden p-4 align-middle text-muted-foreground md:table-cell">{user.posts_count}</td>
                                                 <td className="p-4 align-middle">
                                                     <div className="flex items-center gap-1 font-medium text-amber-600">
                                                         <Award className="h-3 w-3" />
                                                         {user.points}
                                                     </div>
                                                 </td>
-                                                <td className="p-4 align-middle text-muted-foreground">
-                                                    {new Date(
-                                                        user.created_at,
-                                                    ).toLocaleDateString()}
+                                                <td className="hidden p-4 align-middle text-muted-foreground lg:table-cell">
+                                                    {new Date(user.created_at).toLocaleDateString()}
                                                 </td>
                                             </tr>
                                         ))
@@ -229,13 +202,12 @@ export default function AdminUsersIndex({
                                         href={link.url ?? '#'}
                                         preserveState
                                         preserveScroll
-                                        className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${
-                                            link.active
+                                        className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${link.active
                                                 ? 'bg-amber-600 text-white'
                                                 : link.url
-                                                  ? 'hover:bg-muted'
-                                                  : 'pointer-events-none text-muted-foreground'
-                                        }`}
+                                                    ? 'hover:bg-muted'
+                                                    : 'pointer-events-none text-muted-foreground'
+                                            }`}
                                         dangerouslySetInnerHTML={{
                                             __html: link.label,
                                         }}

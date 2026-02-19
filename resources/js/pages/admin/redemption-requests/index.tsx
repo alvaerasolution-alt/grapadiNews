@@ -90,9 +90,9 @@ export default function AdminRedemptionRequestsIndex({
                     <CardHeader>
                         <CardTitle>Permintaan ({requests.total})</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <div className="rounded-md border">
-                            <table className="w-full text-sm">
+                    <CardContent className="p-0">
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[560px] text-sm">
                                 <thead className="bg-muted/50 [&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50">
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
@@ -107,15 +107,11 @@ export default function AdminRedemptionRequestsIndex({
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
                                             Nilai
                                         </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Metode
-                                        </th>
+                                        <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground md:table-cell">Metode</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
                                             Status
                                         </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Tanggal
-                                        </th>
+                                        <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground lg:table-cell">Tanggal</th>
                                         <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">
                                             Aksi
                                         </th>
@@ -150,18 +146,14 @@ export default function AdminRedemptionRequestsIndex({
                                                         'id-ID',
                                                     )}
                                                 </td>
-                                                <td className="p-4 align-middle text-muted-foreground">
-                                                    {req.payment_method_label}
-                                                </td>
+                                                <td className="hidden p-4 align-middle text-muted-foreground md:table-cell">{req.payment_method_label}</td>
                                                 <td className="p-4 align-middle">
                                                     <StatusBadge
                                                         status={req.status}
                                                         label={req.status_label}
                                                     />
                                                 </td>
-                                                <td className="p-4 align-middle text-muted-foreground">
-                                                    {req.created_at_human}
-                                                </td>
+                                                <td className="hidden p-4 align-middle text-muted-foreground lg:table-cell">{req.created_at_human}</td>
                                                 <td className="p-4 text-right align-middle">
                                                     <Link
                                                         href={`/admin/redemption-requests/${req.id}`}
@@ -203,10 +195,10 @@ export default function AdminRedemptionRequestsIndex({
                                         preserveState
                                         preserveScroll
                                         className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${link.active
-                                                ? 'bg-amber-600 text-white'
-                                                : link.url
-                                                    ? 'hover:bg-muted'
-                                                    : 'pointer-events-none text-muted-foreground'
+                                            ? 'bg-amber-600 text-white'
+                                            : link.url
+                                                ? 'hover:bg-muted'
+                                                : 'pointer-events-none text-muted-foreground'
                                             }`}
                                         dangerouslySetInnerHTML={{
                                             __html: link.label,

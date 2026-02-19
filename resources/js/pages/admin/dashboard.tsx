@@ -153,9 +153,9 @@ export default function AdminDashboard({
                                 <ArrowRight className="ml-1 h-4 w-4" />
                             </Link>
                         </CardHeader>
-                        <CardContent>
-                            <div className="rounded-md border">
-                                <table className="w-full text-sm">
+                        <CardContent className="p-0">
+                            <div className="overflow-x-auto">
+                                <table className="w-full min-w-[340px] text-sm">
                                     <thead className="bg-muted/50 [&_tr]:border-b">
                                         <tr className="border-b">
                                             <th className="h-10 px-4 text-left align-middle font-medium text-muted-foreground">
@@ -227,9 +227,9 @@ export default function AdminDashboard({
                                 <ArrowRight className="ml-1 h-4 w-4" />
                             </Link>
                         </CardHeader>
-                        <CardContent>
-                            <div className="rounded-md border">
-                                <table className="w-full text-sm">
+                        <CardContent className="p-0">
+                            <div className="overflow-x-auto">
+                                <table className="w-full min-w-[340px] text-sm">
                                     <thead className="bg-muted/50 [&_tr]:border-b">
                                         <tr className="border-b">
                                             <th className="h-10 px-4 text-left align-middle font-medium text-muted-foreground">

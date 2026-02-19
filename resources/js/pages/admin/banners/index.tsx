@@ -66,9 +66,9 @@ export default function AdminBannersIndex({
     return (
         <AppLayout>
             <Head title="Manajemen Banner" />
-            <div className="space-y-6 p-4">
-                <div className="flex items-center justify-between">
-                    <h1 className="text-2xl font-bold">
+            <div className="space-y-6 p-4 md:p-6">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <h1 className="text-xl font-bold sm:text-2xl">
                         Manajemen Iklan / Banner
                     </h1>
                     <Link href="/admin/banners/create">
@@ -86,7 +86,7 @@ export default function AdminBannersIndex({
 
                 <div className="overflow-hidden rounded-xl border bg-white">
                     <div className="overflow-x-auto">
-                        <table className="w-full text-sm">
+                        <table className="w-full min-w-[580px] text-sm">
                             <thead>
                                 <tr className="border-b bg-gray-50 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                                     <th className="p-4">Preview</th>

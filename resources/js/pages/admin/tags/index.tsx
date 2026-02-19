@@ -67,9 +67,9 @@ export default function AdminTagsIndex({ tags }: AdminTagsIndexProps) {
                     <CardHeader>
                         <CardTitle>All Tags ({tags.total})</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <div className="rounded-md border">
-                            <table className="w-full text-sm">
+                    <CardContent className="p-0">
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[360px] text-sm">
                                 <thead className="bg-muted/50 [&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50">
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
@@ -160,13 +160,12 @@ export default function AdminTagsIndex({ tags }: AdminTagsIndexProps) {
                                         href={link.url ?? '#'}
                                         preserveState
                                         preserveScroll
-                                        className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${
-                                            link.active
+                                        className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${link.active
                                                 ? 'bg-amber-600 text-white'
                                                 : link.url
-                                                  ? 'hover:bg-muted'
-                                                  : 'pointer-events-none text-muted-foreground'
-                                        }`}
+                                                    ? 'hover:bg-muted'
+                                                    : 'pointer-events-none text-muted-foreground'
+                                            }`}
                                         dangerouslySetInnerHTML={{
                                             __html: link.label,
                                         }}

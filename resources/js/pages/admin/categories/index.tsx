@@ -79,9 +79,9 @@ export default function AdminCategoriesIndex({
                             All Categories ({categories.total})
                         </CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <div className="rounded-md border">
-                            <table className="w-full text-sm">
+                    <CardContent className="p-0">
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[400px] text-sm">
                                 <thead className="bg-muted/50 [&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50">
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
@@ -172,13 +172,12 @@ export default function AdminCategoriesIndex({
                                         href={link.url ?? '#'}
                                         preserveState
                                         preserveScroll
-                                        className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${
-                                            link.active
+                                        className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${link.active
                                                 ? 'bg-amber-600 text-white'
                                                 : link.url
-                                                  ? 'hover:bg-muted'
-                                                  : 'pointer-events-none text-muted-foreground'
-                                        }`}
+                                                    ? 'hover:bg-muted'
+                                                    : 'pointer-events-none text-muted-foreground'
+                                            }`}
                                         dangerouslySetInnerHTML={{
                                             __html: link.label,
                                         }}
@@ -199,7 +198,7 @@ export default function AdminCategoriesIndex({
                             <DialogTitle>Delete Category</DialogTitle>
                             <DialogDescription>
                                 {categoryToDelete?.posts_count &&
-                                categoryToDelete.posts_count > 0 ? (
+                                    categoryToDelete.posts_count > 0 ? (
                                     <span className="text-red-500">
                                         Cannot delete &quot;
                                         {categoryToDelete.name}&quot; because it
@@ -225,13 +224,13 @@ export default function AdminCategoriesIndex({
                             </Button>
                             {(!categoryToDelete?.posts_count ||
                                 categoryToDelete.posts_count === 0) && (
-                                <Button
-                                    variant="destructive"
-                                    onClick={confirmDelete}
-                                >
-                                    Delete
-                                </Button>
-                            )}
+                                    <Button
+                                        variant="destructive"
+                                        onClick={confirmDelete}
+                                    >
+                                        Delete
+                                    </Button>
+                                )}
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>

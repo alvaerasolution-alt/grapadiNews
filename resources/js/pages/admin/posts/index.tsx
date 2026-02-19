@@ -174,29 +174,19 @@ export default function AdminPostsIndex({
                     <CardHeader>
                         <CardTitle>All Posts ({posts.total})</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <div className="rounded-md border">
-                            <table className="w-full text-sm">
+                    <CardContent className="p-0">
+                        <div className="overflow-x-auto">
+                            <table className="w-full min-w-[600px] text-sm">
                                 <thead className="bg-muted/50 [&_tr]:border-b">
                                     <tr className="border-b transition-colors hover:bg-muted/50">
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
                                             Title
                                         </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Author
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Category
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Status
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Views
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Date
-                                        </th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Author</th>
+                                        <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground sm:table-cell">Category</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                                        <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground md:table-cell">Views</th>
+                                        <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground lg:table-cell">Date</th>
                                         <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">
                                             Actions
                                         </th>
@@ -220,31 +210,20 @@ export default function AdminPostsIndex({
                                                 <td className="p-4 align-middle text-muted-foreground">
                                                     {post.user.name}
                                                 </td>
-                                                <td className="p-4 align-middle">
-                                                    <CategoryBadge
-                                                        name={
-                                                            post.category.name
-                                                        }
-                                                        slug={
-                                                            post.category.slug
-                                                        }
-                                                    />
+                                                <td className="hidden p-4 align-middle sm:table-cell">
+                                                    <CategoryBadge name={post.category.name} slug={post.category.slug} />
                                                 </td>
                                                 <td className="p-4 align-middle">
-                                                    <StatusBadge
-                                                        status={post.status}
-                                                    />
+                                                    <StatusBadge status={post.status} />
                                                 </td>
-                                                <td className="p-4 align-middle text-muted-foreground">
+                                                <td className="hidden p-4 align-middle text-muted-foreground md:table-cell">
                                                     <div className="flex items-center gap-1">
                                                         <Eye className="h-3 w-3" />
                                                         {post.view_count.toLocaleString()}
                                                     </div>
                                                 </td>
-                                                <td className="p-4 align-middle text-muted-foreground">
-                                                    {new Date(
-                                                        post.created_at,
-                                                    ).toLocaleDateString()}
+                                                <td className="hidden p-4 align-middle text-muted-foreground lg:table-cell">
+                                                    {new Date(post.created_at).toLocaleDateString()}
                                                 </td>
                                                 <td className="p-4 text-right align-middle">
                                                     <div className="flex justify-end gap-2">
@@ -304,13 +283,12 @@ export default function AdminPostsIndex({
                                         href={link.url ?? '#'}
                                         preserveState
                                         preserveScroll
-                                        className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${
-                                            link.active
+                                        className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${link.active
                                                 ? 'bg-amber-600 text-white'
                                                 : link.url
-                                                  ? 'hover:bg-muted'
-                                                  : 'pointer-events-none text-muted-foreground'
-                                        }`}
+                                                    ? 'hover:bg-muted'
+                                                    : 'pointer-events-none text-muted-foreground'
+                                            }`}
                                         dangerouslySetInnerHTML={{
                                             __html: link.label,
                                         }}

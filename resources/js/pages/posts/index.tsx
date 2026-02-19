@@ -9,14 +9,8 @@ import { dashboard } from '@/routes';
 import type { BreadcrumbItem, PaginatedResponse, Post } from '@/types';
 
 const breadcrumbs: BreadcrumbItem[] = [
-    {
-        title: 'Dashboard',
-        href: dashboard().url,
-    },
-    {
-        title: 'My Articles',
-        href: '/posts',
-    },
+    { title: 'Dashboard', href: dashboard().url },
+    { title: 'My Articles', href: '/posts' },
 ];
 
 interface PostsIndexProps {
@@ -30,17 +24,13 @@ export default function PostsIndex({ posts }: PostsIndexProps) {
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="My Articles" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
-                <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight">
-                            My Articles
-                        </h1>
-                        <p className="text-sm text-muted-foreground">
-                            Manage and track performance of your content.
-                        </p>
+                        <h1 className="text-xl font-bold tracking-tight sm:text-2xl">My Articles</h1>
+                        <p className="text-sm text-muted-foreground">Manage and track your content.</p>
                     </div>
-                    <Link href="/posts/create">
-                        <Button className="bg-amber-600 text-white hover:bg-amber-700">
+                    <Link href="/posts/create" className="shrink-0">
+                        <Button className="w-full bg-amber-600 text-white hover:bg-amber-700 sm:w-auto">
                             <Plus className="mr-2 h-4 w-4" />
                             New Article
                         </Button>
@@ -48,108 +38,120 @@ export default function PostsIndex({ posts }: PostsIndexProps) {
                 </div>
 
                 <Card>
-                    <CardHeader>
+                    <CardHeader className="pb-3">
                         <CardTitle>All Posts</CardTitle>
                     </CardHeader>
-                    <CardContent>
-                        <div className="rounded-md border">
+                    <CardContent className="p-0">
+                        {/* Mobile: Card list */}
+                        <div className="divide-y sm:hidden">
+                            {posts.data.length > 0 ? (
+                                posts.data.map((post) => (
+                                    <div key={post.id} className="flex items-start justify-between gap-3 p-4">
+                                        <div className="min-w-0 flex-1 space-y-1.5">
+                                            <p className="font-medium leading-snug line-clamp-2">{post.title}</p>
+                                            <div className="flex flex-wrap items-center gap-2">
+                                                <StatusBadge status={post.status} />
+                                                <CategoryBadge
+                                                    name={post.category.name}
+                                                    slug={post.category.slug}
+                                                    className="text-[10px]"
+                                                />
+                                            </div>
+                                            <div className="flex items-center gap-3 text-xs text-muted-foreground">
+                                                <span className="flex items-center gap-1">
+                                                    <Eye className="h-3 w-3" />
+                                                    {post.view_count.toLocaleString()} views
+                                                </span>
+                                                {(post.points_awarded_on_publish > 0 || post.points_awarded_from_views > 0) && (
+                                                    <span className="flex items-center gap-1 text-amber-600 font-medium">
+                                                        <Award className="h-3 w-3" />
+                                                        {post.points_awarded_on_publish + post.points_awarded_from_views} pts
+                                                    </span>
+                                                )}
+                                            </div>
+                                        </div>
+                                        <div className="flex shrink-0 gap-1">
+                                            <Link href={`/posts/${post.slug}/edit`}>
+                                                <Button variant="ghost" size="icon" className="h-8 w-8">
+                                                    <Edit className="h-4 w-4" />
+                                                    <span className="sr-only">Edit</span>
+                                                </Button>
+                                            </Link>
+                                            <Link
+                                                href={`/posts/${post.slug}`}
+                                                method="delete"
+                                                as="button"
+                                                only={['posts']}
+                                                onSuccess={() => alert('Post deleted')}
+                                            >
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="h-8 w-8 text-destructive hover:text-destructive"
+                                                >
+                                                    <Trash2 className="h-4 w-4" />
+                                                    <span className="sr-only">Delete</span>
+                                                </Button>
+                                            </Link>
+                                        </div>
+                                    </div>
+                                ))
+                            ) : (
+                                <div className="p-8 text-center text-muted-foreground">
+                                    No articles found. Start writing!
+                                </div>
+                            )}
+                        </div>
+
+                        {/* Desktop: Table */}
+                        <div className="hidden overflow-x-auto sm:block">
                             <table className="w-full text-sm">
                                 <thead className="bg-muted/50 [&_tr]:border-b">
-                                    <tr className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted">
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Title
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Category
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Status
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Performance
-                                        </th>
-                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">
-                                            Date
-                                        </th>
-                                        <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">
-                                            Actions
-                                        </th>
+                                    <tr className="border-b transition-colors hover:bg-muted/50">
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Title</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Category</th>
+                                        <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Status</th>
+                                        <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground md:table-cell">Performance</th>
+                                        <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground lg:table-cell">Date</th>
+                                        <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="[&_tr:last-child]:border-0">
                                     {posts.data.length > 0 ? (
                                         posts.data.map((post) => (
-                                            <tr
-                                                key={post.id}
-                                                className="border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted"
-                                            >
-                                                <td className="p-4 align-middle font-medium">
-                                                    <div className="flex flex-col">
-                                                        <span>
-                                                            {post.title}
-                                                        </span>
-                                                        <span className="text-xs text-muted-foreground md:hidden">
-                                                            {post.excerpt?.substring(
-                                                                0,
-                                                                50,
-                                                            )}
-                                                            ...
-                                                        </span>
-                                                    </div>
+                                            <tr key={post.id} className="border-b transition-colors hover:bg-muted/50">
+                                                <td className="p-4 align-middle font-medium max-w-xs">
+                                                    <span className="line-clamp-2">{post.title}</span>
                                                 </td>
                                                 <td className="p-4 align-middle">
-                                                    <CategoryBadge
-                                                        name={
-                                                            post.category.name
-                                                        }
-                                                        slug={
-                                                            post.category.slug
-                                                        }
-                                                    />
+                                                    <CategoryBadge name={post.category.name} slug={post.category.slug} />
                                                 </td>
                                                 <td className="p-4 align-middle">
-                                                    <StatusBadge
-                                                        status={post.status}
-                                                    />
+                                                    <StatusBadge status={post.status} />
                                                 </td>
-                                                <td className="p-4 align-middle">
+                                                <td className="hidden p-4 align-middle md:table-cell">
                                                     <div className="flex flex-col gap-1 text-xs">
                                                         <div className="flex items-center gap-1 text-muted-foreground">
                                                             <Eye className="h-3 w-3" />
                                                             {post.view_count.toLocaleString()}
                                                         </div>
-                                                        {(post.points_awarded_on_publish >
-                                                            0 ||
-                                                            post.points_awarded_from_views >
-                                                                0) && (
+                                                        {(post.points_awarded_on_publish > 0 || post.points_awarded_from_views > 0) && (
                                                             <div className="flex items-center gap-1 font-medium text-amber-600">
                                                                 <Award className="h-3 w-3" />
-                                                                {post.points_awarded_on_publish +
-                                                                    post.points_awarded_from_views}{' '}
-                                                                pts
+                                                                {post.points_awarded_on_publish + post.points_awarded_from_views} pts
                                                             </div>
                                                         )}
                                                     </div>
                                                 </td>
-                                                <td className="p-4 align-middle text-muted-foreground">
-                                                    {new Date(
-                                                        post.created_at,
-                                                    ).toLocaleDateString()}
+                                                <td className="hidden p-4 align-middle text-muted-foreground lg:table-cell">
+                                                    {new Date(post.created_at).toLocaleDateString()}
                                                 </td>
                                                 <td className="p-4 text-right align-middle">
-                                                    <div className="flex justify-end gap-2">
-                                                        <Link
-                                                            href={`/posts/${post.slug}/edit`}
-                                                        >
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="icon"
-                                                                className="h-8 w-8"
-                                                            >
+                                                    <div className="flex justify-end gap-1">
+                                                        <Link href={`/posts/${post.slug}/edit`}>
+                                                            <Button variant="ghost" size="icon" className="h-8 w-8">
                                                                 <Edit className="h-4 w-4" />
-                                                                <span className="sr-only">
-                                                                    Edit
-                                                                </span>
+                                                                <span className="sr-only">Edit</span>
                                                             </Button>
                                                         </Link>
                                                         <Link
@@ -157,11 +159,7 @@ export default function PostsIndex({ posts }: PostsIndexProps) {
                                                             method="delete"
                                                             as="button"
                                                             only={['posts']}
-                                                            onSuccess={() =>
-                                                                alert(
-                                                                    'Post deleted',
-                                                                )
-                                                            } // Primitive, but functional
+                                                            onSuccess={() => alert('Post deleted')}
                                                         >
                                                             <Button
                                                                 variant="ghost"
@@ -169,9 +167,7 @@ export default function PostsIndex({ posts }: PostsIndexProps) {
                                                                 className="h-8 w-8 text-destructive hover:text-destructive"
                                                             >
                                                                 <Trash2 className="h-4 w-4" />
-                                                                <span className="sr-only">
-                                                                    Delete
-                                                                </span>
+                                                                <span className="sr-only">Delete</span>
                                                             </Button>
                                                         </Link>
                                                     </div>
@@ -180,20 +176,14 @@ export default function PostsIndex({ posts }: PostsIndexProps) {
                                         ))
                                     ) : (
                                         <tr>
-                                            <td
-                                                colSpan={6}
-                                                className="p-4 text-center text-muted-foreground"
-                                            >
-                                                No articles found. Start
-                                                writing!
+                                            <td colSpan={6} className="p-8 text-center text-muted-foreground">
+                                                No articles found. Start writing!
                                             </td>
                                         </tr>
                                     )}
                                 </tbody>
                             </table>
                         </div>
-
-                        {/* Pagination would go here */}
                     </CardContent>
                 </Card>
             </div>
