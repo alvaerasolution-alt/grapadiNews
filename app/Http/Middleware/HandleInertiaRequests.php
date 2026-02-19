@@ -54,18 +54,19 @@ class HandleInertiaRequests extends Middleware
                 'success' => $request->session()->get('success'),
                 'error' => $request->session()->get('error'),
             ],
-            'googleAds' => [
-                'publisherId' => Setting::get('google_adsense_publisher_id'),
-                'slots' => [
-                    'article_top' => Setting::get('google_ad_slot_article_top'),
-                    'article_bottom' => Setting::get('google_ad_slot_article_bottom'),
-                    'home_hero_below' => Setting::get('google_ad_slot_home_hero_below'),
-                    'home_sidebar' => Setting::get('google_ad_slot_home_sidebar'),
-                    'home_feed_inline' => Setting::get('google_ad_slot_home_feed_inline'),
-                    'category_top' => Setting::get('google_ad_slot_category_top'),
-                    'category_sidebar' => Setting::get('google_ad_slot_category_sidebar'),
+            'mgidAds' => [
+                'siteId' => Setting::get('mgid_site_id'),
+                'widgets' => [
+                    'article_top' => Setting::get('mgid_widget_article_top'),
+                    'article_bottom' => Setting::get('mgid_widget_article_bottom'),
+                    'home_hero_below' => Setting::get('mgid_widget_home_hero_below'),
+                    'home_sidebar' => Setting::get('mgid_widget_home_sidebar'),
+                    'home_feed_inline' => Setting::get('mgid_widget_home_feed_inline'),
+                    'category_top' => Setting::get('mgid_widget_category_top'),
+                    'category_sidebar' => Setting::get('mgid_widget_category_sidebar'),
                 ],
             ],
+            'webSettings' => Setting::getWebSettings(),
             'navCategories' => cache()->remember('nav_categories', 3600, fn () => Category::orderBy('name')->get(['id', 'name', 'slug'])),
         ];
     }

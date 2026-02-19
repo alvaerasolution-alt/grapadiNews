@@ -1,6 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
 import {
-    BookOpen,
     FileText,
     Folder,
     Gift,
@@ -88,24 +87,18 @@ const adminNavItems: NavItem[] = [
         icon: Image,
     },
     {
-        title: 'Settings',
-        href: '/admin/settings',
+        title: 'Web Settings',
+        href: '/admin/settings/web',
+        icon: Settings,
+    },
+    {
+        title: 'Ads Settings',
+        href: '/admin/settings/ads',
         icon: Settings,
     },
 ];
 
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: Folder,
-    },
-    {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
-    },
-];
+const footerNavItems: NavItem[] = [];
 
 export function AppSidebar() {
     const { auth } = usePage().props;

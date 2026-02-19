@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import PublicLayout from '@/layouts/public-layout';
 import Seo, { createBlogPostingJsonLd } from '@/components/seo';
 import CategoryBadge from '@/components/category-badge';
+import LazyImage from '@/components/lazy-image';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import ReadingToolbar from '@/components/reading-toolbar';
@@ -70,16 +71,12 @@ interface Props {
 function RelatedArticleCard({ post }: { post: PostCard }) {
     return (
         <Link href={`/${post.slug}`} className="group flex gap-3 py-3">
-            {post.featured_image ? (
-                <img
+            <div className="h-16 w-24 shrink-0 overflow-hidden rounded-lg bg-gray-800">
+                <LazyImage
                     src={post.featured_image}
-                    alt=""
-                    className="h-16 w-24 shrink-0 rounded-lg object-cover"
-                    loading="lazy"
+                    alt={post.title}
                 />
-            ) : (
-                <div className="h-16 w-24 shrink-0 rounded-lg bg-gray-800" />
-            )}
+            </div>
             <div className="min-w-0 flex-1">
                 <h4 className="line-clamp-2 text-sm font-semibold text-gray-200 group-hover:text-amber-400">
                     {post.title}
@@ -185,7 +182,10 @@ export default function PostShow({
                 </div>
 
                 {/* Article content area */}
-                <div className="mx-auto max-w-7xl px-4 pb-10">
+                <div
+                    className="mx-auto px-4 pb-10 transition-all duration-500 ease-in-out"
+                    style={{ maxWidth: articleStyles.maxWidth }}
+                >
                     {/* Article Header — full width above the grid */}
                     <article>
                         <header className="flex flex-col gap-3 pt-2">
@@ -220,18 +220,16 @@ export default function PostShow({
                                     </span>
                                 </div>
                             </div>
-
-
                         </header>
 
                         {/* Featured Image */}
                         {post.featured_image && (
                             <div className="mt-5 overflow-hidden rounded-xl">
-                                <img
+                                <LazyImage
                                     src={post.featured_image}
                                     alt={post.title}
+                                    priority
                                     fetchPriority="high"
-                                    className="h-auto w-full object-cover"
                                 />
                             </div>
                         )}
@@ -239,7 +237,7 @@ export default function PostShow({
                         {/* Top Banners */}
                         <AdSlot
                             banners={topBanners}
-                            googleAdSlot="article_top"
+                            mgidWidgetKey="article_top"
                             className="my-5"
                         />
 
@@ -261,11 +259,10 @@ export default function PostShow({
                         <div className="min-w-0">
                             {/* Article Body */}
                             <div
-                                className={`prose max-w-none prose-invert ${
-                                    readingPrefs.preferences.theme === 'warm'
-                                        ? 'prose-amber'
-                                        : ''
-                                }`}
+                                className={`prose max-w-none prose-invert ${readingPrefs.preferences.theme === 'warm'
+                                    ? 'prose-amber'
+                                    : ''
+                                    }`}
                                 style={{
                                     fontSize: articleStyles.fontSize,
                                     fontFamily: articleStyles.fontFamily,
@@ -293,7 +290,7 @@ export default function PostShow({
                                 <AdSlot
                                     banners={sidebarBanners}
                                     layout="vertical"
-                                    googleAdSlot="article_sidebar"
+                                    mgidWidgetKey="article_sidebar"
                                 />
 
                                 {/* Popular Posts */}
@@ -335,7 +332,7 @@ export default function PostShow({
                         {/* Bottom Banners */}
                         <AdSlot
                             banners={bottomBanners}
-                            googleAdSlot="article_bottom"
+                            mgidWidgetKey="article_bottom"
                             className="my-6"
                         />
 

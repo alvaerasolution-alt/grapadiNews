@@ -68,8 +68,8 @@ class PublicCategoryController extends Controller
             return $post->unsplash_image_url;
         }
 
-        // 3. Return placeholder instead of blocking API call
-        // Async image fetching should be handled by a queue job
+        // Images are fetched by PostObserver on creation
+        // or via: php artisan posts:fetch-unsplash-images
         return null;
     }
 }

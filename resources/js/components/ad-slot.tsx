@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import GoogleAdUnit from '@/components/google-ad-unit';
+import MgidAdUnit from '@/components/mgid-ad-unit';
 
 export interface BannerItem {
     id: number;
@@ -11,14 +11,14 @@ export interface BannerItem {
 interface AdSlotProps {
     banners: BannerItem[];
     layout?: 'horizontal' | 'vertical' | 'inline';
-    googleAdSlot?: string;
+    mgidWidgetKey?: string;
     className?: string;
 }
 
 export default function AdSlot({
     banners,
     layout = 'horizontal',
-    googleAdSlot,
+    mgidWidgetKey,
     className = '',
 }: AdSlotProps) {
     const handleClick = useCallback(
@@ -44,15 +44,9 @@ export default function AdSlot({
     );
 
     const hasManualBanners = banners && banners.length > 0;
-    const googleAdFormat =
-        layout === 'vertical'
-            ? 'vertical'
-            : layout === 'inline'
-                ? 'rectangle'
-                : 'horizontal';
 
     // Nothing to show at all
-    if (!hasManualBanners && !googleAdSlot) return null;
+    if (!hasManualBanners && !mgidWidgetKey) return null;
 
     return (
         <div className={`flex flex-col gap-4 ${className}`}>
@@ -118,12 +112,9 @@ export default function AdSlot({
                 </>
             )}
 
-            {/* Google AdSense unit — always shown alongside manual banners */}
-            {googleAdSlot && (
-                <GoogleAdUnit
-                    slotKey={googleAdSlot}
-                    format={googleAdFormat}
-                />
+            {/* MGID Ad Unit */}
+            {mgidWidgetKey && (
+                <MgidAdUnit widgetKey={mgidWidgetKey} />
             )}
         </div>
     );

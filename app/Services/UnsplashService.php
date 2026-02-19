@@ -18,20 +18,19 @@ class UnsplashService
     }
 
     /**
-     * Search for an image with layered fallback strategy:
+     * Search for a unique image with layered fallback strategy:
      * 1. Search by title keywords
-     * 2. Search by category name
-     * 3. Get random photo
+     * 2. Search by tags
+     * 3. Search by category name
+     * 4. Get random photo
      *
-     * @return string|null The regular size image URL or null if not found
+     * @param  string  $title  Post title
+     * @param  string|null  $categoryName  Category name
+     * @param  array  $tags  Array of tag names
+     * @param  array  $usedImages  URLs already used in this batch (prevents duplicates)
+     * @return string|null The regular size image URL or null
      */
-    /**
-     * Search for an image with uniqueness guarantee.
-     *
-     * @param  array  $usedImages  (optional array of URLs already used)
-     * @return string|null Unique Unsplash image URL or null if not found
-     */
-    public function searchImage(string $title, ?string $categoryName = null, array $usedImages = []): ?string
+    public function searchImage(string $title, ?string $categoryName = null, array $tags = [], array $usedImages = []): ?string
     {
         if (empty($this->accessKey)) {
             Log::warning('Unsplash: Access key not configured');
@@ -39,7 +38,7 @@ class UnsplashService
             return null;
         }
 
-        // Layer 1: Search by title keywords (extract meaningful words)
+        // Layer 1: Search by title keywords
         $titleKeywords = $this->extractKeywords($title);
         if ($titleKeywords) {
             $result = $this->searchUnique($titleKeywords, $usedImages);
@@ -48,7 +47,16 @@ class UnsplashService
             }
         }
 
-        // Layer 2: Search by category name
+        // Layer 2: Search by tags (combine tag names)
+        if (! empty($tags)) {
+            $tagQuery = implode(' ', array_slice($tags, 0, 3));
+            $result = $this->searchUnique($tagQuery, $usedImages);
+            if ($result) {
+                return $result;
+            }
+        }
+
+        // Layer 3: Search by category name
         if ($categoryName) {
             $result = $this->searchUnique($categoryName, $usedImages);
             if ($result) {
@@ -56,26 +64,26 @@ class UnsplashService
             }
         }
 
-        // Layer 3: Get random photo
+        // Layer 4: Get random photo
         return $this->getRandomPhotoUnique($usedImages);
     }
 
     /**
-     * Search Unsplash for unique image.
+     * Search Unsplash for a unique image (not already in DB or batch).
      */
     private function searchUnique(string $query, array $usedImages = []): ?string
     {
-        // Try up to 5 image results for uniqueness
         if (empty($query)) {
             return null;
         }
+
         try {
             $response = Http::withHeaders([
                 'Authorization' => "Client-ID {$this->accessKey}",
                 'Accept-Version' => 'v1',
             ])->get("{$this->baseUrl}/search/photos", [
                 'query' => $query,
-                'per_page' => 10, // Increased page size to find unique easier
+                'per_page' => 10,
                 'orientation' => 'landscape',
             ]);
 
@@ -105,7 +113,6 @@ class UnsplashService
      */
     private function getRandomPhotoUnique(array $usedImages = []): ?string
     {
-        // Try up to 3 times for uniqueness
         for ($i = 0; $i < 3; $i++) {
             try {
                 $response = Http::withHeaders([
@@ -113,13 +120,12 @@ class UnsplashService
                     'Accept-Version' => 'v1',
                 ])->get("{$this->baseUrl}/photos/random", [
                     'orientation' => 'landscape',
-                    'count' => 1, // Explicitly request 1
+                    'count' => 1,
                 ]);
+
                 if ($response->successful()) {
                     $data = $response->json();
-                    // Handling if response is array of photos (when count > 1) or single object
                     $item = isset($data[0]) ? $data[0] : $data;
-                    
                     $url = $item['urls']['regular'] ?? null;
 
                     if ($url && ! in_array($url, $usedImages, true) && ! $this->isImageInDatabase($url)) {
@@ -149,7 +155,6 @@ class UnsplashService
      */
     private function extractKeywords(string $title): string
     {
-        // Remove common Indonesian stop words and short words
         $stopWords = [
             'yang', 'dan', 'ini', 'itu', 'untuk', 'dengan', 'dari', 'pada', 'ke', 'di',
             'adalah', 'akan', 'atau', 'juga', 'sudah', 'saat', 'bisa', 'ada', 'tidak',
@@ -159,88 +164,19 @@ class UnsplashService
             'tanpa', 'ribet', 'mudah', 'cepat', 'terbaik', 'paling',
         ];
 
-        // Convert to lowercase and split
         $words = preg_split('/\s+/', Str::lower($title));
 
-        // Filter out stop words and short words
         $keywords = array_filter($words, function ($word) use ($stopWords) {
             $word = preg_replace('/[^a-z0-9]/', '', $word);
 
             return strlen($word) > 2 && ! in_array($word, $stopWords, true);
         });
 
-        // Take first 5-6 meaningful keywords
-        $keywords = array_slice(array_values($keywords), 0, 6);
+        $keywords = array_slice(array_values($keywords), 0, 5);
 
         $query = implode(' ', $keywords);
 
-        // Fallback to original title if extraction results in empty string
         return $query ?: $title;
-    }
-
-    /**
-     * Search photos on Unsplash.
-     */
-    private function search(string $query): ?string
-    {
-        if (empty($query)) {
-            return null;
-        }
-
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => "Client-ID {$this->accessKey}",
-                'Accept-Version' => 'v1',
-            ])->get("{$this->baseUrl}/search/photos", [
-                'query' => $query,
-                'per_page' => 1,
-                'orientation' => 'landscape',
-            ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-
-                if (! empty($data['results'][0]['urls']['regular'])) {
-                    return $data['results'][0]['urls']['regular'];
-                }
-            }
-        } catch (\Exception $e) {
-            Log::error('Unsplash search failed', [
-                'query' => $query,
-                'error' => $e->getMessage(),
-            ]);
-        }
-
-        return null;
-    }
-
-    /**
-     * Get a random photo from Unsplash.
-     */
-    private function getRandomPhoto(): ?string
-    {
-        try {
-            $response = Http::withHeaders([
-                'Authorization' => "Client-ID {$this->accessKey}",
-                'Accept-Version' => 'v1',
-            ])->get("{$this->baseUrl}/photos/random", [
-                'orientation' => 'landscape',
-            ]);
-
-            if ($response->successful()) {
-                $data = $response->json();
-
-                if (! empty($data['urls']['regular'])) {
-                    return $data['urls']['regular'];
-                }
-            }
-        } catch (\Exception $e) {
-            Log::error('Unsplash random photo failed', [
-                'error' => $e->getMessage(),
-            ]);
-        }
-
-        return null;
     }
 
     /**

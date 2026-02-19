@@ -185,7 +185,11 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 }
 
 export default function PublicHeader() {
-    const { auth, navCategories } = usePage().props;
+    const { auth, navCategories, webSettings } = usePage().props as {
+        auth: any;
+        navCategories: any[];
+        webSettings: { site_name: string; site_logo: string | null };
+    };
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -254,11 +258,20 @@ export default function PublicHeader() {
                                                 setIsMobileMenuOpen(false)
                                             }
                                         >
-                                            <div className="flex size-8 items-center justify-center rounded-md bg-amber-600 text-white">
-                                                <AppLogoIcon className="size-5 fill-current" />
-                                            </div>
+                                            {webSettings?.site_logo ? (
+                                                <img
+                                                    src={`/storage/${webSettings.site_logo}`}
+                                                    alt={webSettings.site_name}
+                                                    className="h-8 w-auto object-contain"
+                                                />
+                                            ) : (
+                                                <div className="flex size-8 items-center justify-center rounded-md bg-amber-600 text-white">
+                                                    <AppLogoIcon className="size-5 fill-current" />
+                                                </div>
+                                            )}
                                             <span className="text-lg font-bold text-amber-500">
-                                                GrapadiNews
+                                                {webSettings?.site_name ||
+                                                    'GrapadiNews'}
                                             </span>
                                         </Link>
                                     </div>
@@ -330,11 +343,19 @@ export default function PublicHeader() {
 
                         {/* Logo */}
                         <Link href="/" className="flex items-center gap-2">
-                            <div className="flex size-8 items-center justify-center rounded-md bg-amber-600 text-white">
-                                <AppLogoIcon className="size-5 fill-current" />
-                            </div>
+                            {webSettings?.site_logo ? (
+                                <img
+                                    src={`/storage/${webSettings.site_logo}`}
+                                    alt={webSettings.site_name}
+                                    className="h-8 w-auto object-contain"
+                                />
+                            ) : (
+                                <div className="flex size-8 items-center justify-center rounded-md bg-amber-600 text-white">
+                                    <AppLogoIcon className="size-5 fill-current" />
+                                </div>
+                            )}
                             <span className="text-lg font-bold text-amber-500">
-                                GrapadiNews
+                                {webSettings?.site_name || 'GrapadiNews'}
                             </span>
                         </Link>
                     </div>

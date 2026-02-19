@@ -3,12 +3,14 @@
 use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPostController;
+use App\Http\Controllers\Admin\AdSettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\RedemptionItemController;
 use App\Http\Controllers\Admin\RedemptionRequestController;
-use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\StoreUserController;
 use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\BannerClickController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MediaController;
@@ -61,11 +63,24 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::resource('tags', TagController::class)->except(['show']);
 
         Route::get('users', [UserController::class, 'index'])->name('users.index');
+        Route::get('users/create', [StoreUserController::class, 'create'])->name('users.create');
+        Route::post('users', [StoreUserController::class, 'store'])->name('users.store');
         Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
         Route::patch('users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
 
-        Route::get('settings', [SettingController::class, 'index'])->name('settings.index');
-        Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+        // Settings - Web & Ads (new)
+        Route::get('settings/web', [WebSettingController::class, 'index'])->name('settings.web');
+        Route::post('settings/web', [WebSettingController::class, 'update'])->name('settings.web.update');
+        Route::delete('settings/web/logo/delete', [WebSettingController::class, 'destroyLogo'])->name('settings.web.logo.delete');
+        Route::delete('settings/web/favicon/delete', [WebSettingController::class, 'destroyFavicon'])->name('settings.web.favicon.delete');
+
+        Route::get('settings/ads', [AdSettingController::class, 'index'])->name('settings.ads');
+        Route::post('settings/ads', [AdSettingController::class, 'update'])->name('settings.ads.update');
+
+        // Settings - Legacy (deprecated, redirect to new)
+        Route::get('settings', function () {
+            return redirect()->route('admin.settings.web');
+        });
 
         // Banner management
         Route::resource('banners', AdminBannerController::class)->except(['show']);

@@ -48,7 +48,10 @@ export const THEME_STYLES: Record<
     },
 };
 
-export const FONT_FAMILY_MAP: Record<FontFamily, { css: string; label: string }> = {
+export const FONT_FAMILY_MAP: Record<
+    FontFamily,
+    { css: string; label: string }
+> = {
     sans: {
         css: "'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif",
         label: 'Sans',
@@ -63,16 +66,22 @@ export const FONT_FAMILY_MAP: Record<FontFamily, { css: string; label: string }>
     },
 };
 
-export const LINE_HEIGHT_MAP: Record<LineHeight, { value: number; label: string }> = {
+export const LINE_HEIGHT_MAP: Record<
+    LineHeight,
+    { value: number; label: string }
+> = {
     compact: { value: 1.5, label: 'Compact' },
     normal: { value: 1.75, label: 'Normal' },
     spacious: { value: 2.0, label: 'Spacious' },
 };
 
-export const CONTENT_WIDTH_MAP: Record<ContentWidth, { value: string; label: string }> = {
-    narrow: { value: '640px', label: 'Narrow' },
-    normal: { value: '768px', label: 'Normal' },
-    wide: { value: '896px', label: 'Wide' },
+export const CONTENT_WIDTH_MAP: Record<
+    ContentWidth,
+    { value: string; label: string }
+> = {
+    narrow: { value: '900px', label: 'Narrow' },
+    normal: { value: '1200px', label: 'Normal' },
+    wide: { value: '1400px', label: 'Wide' },
 };
 
 function loadPreferences(): ReadingPreferences {
@@ -100,11 +109,20 @@ function savePreferences(prefs: ReadingPreferences): void {
 }
 
 export function useReadingPreferences() {
-    const [preferences, setPreferences] = useState<ReadingPreferences>(loadPreferences);
+    const [preferences, setPreferences] =
+        useState<ReadingPreferences>(DEFAULT_PREFERENCES);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        savePreferences(preferences);
-    }, [preferences]);
+        setPreferences(loadPreferences());
+        setIsLoaded(true);
+    }, []);
+
+    useEffect(() => {
+        if (isLoaded) {
+            savePreferences(preferences);
+        }
+    }, [preferences, isLoaded]);
 
     const setTheme = useCallback((theme: ReadingTheme) => {
         setPreferences((prev) => ({ ...prev, theme }));

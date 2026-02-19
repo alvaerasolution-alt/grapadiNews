@@ -6,8 +6,6 @@
         <meta name="robots" content="index, follow">
 
         {{-- Inline style to set the HTML background color based on our theme in app.css --}}
-
-        {{-- Inline style to set the HTML background color based on our theme in app.css --}}
         <style>
             html {
                 background-color: oklch(1 0 0);
@@ -28,10 +26,6 @@
         <link rel="preconnect" href="https://fonts.bunny.net" crossorigin>
         <link rel="preload" href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" as="style">
         <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700,800&display=swap" rel="stylesheet" />
-
-        @php
-            $publisherId = \App\Models\Setting::get('google_adsense_publisher_id');
-        @endphp
 
         @viteReactRefresh
         @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])

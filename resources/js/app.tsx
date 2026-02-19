@@ -5,6 +5,7 @@ import { createRoot } from 'react-dom/client';
 import '../css/app.css';
 import { initializeTheme } from './hooks/use-appearance';
 
+
 const appName = import.meta.env.VITE_APP_NAME || 'Laravel';
 
 createInertiaApp({
@@ -24,7 +25,10 @@ createInertiaApp({
         );
     },
     progress: {
-        color: '#4B5563',
+        color: '#f59e0b',
+        delay: 0,
+        includeCSS: true,
+        showSpinner: true,
     },
 });
 

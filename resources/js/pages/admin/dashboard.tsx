@@ -63,7 +63,7 @@ export default function AdminDashboard({
                 )}
 
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight">
+                    <h1 className="text-2xl font-bold tracking-tight text-foreground">
                         Admin Dashboard
                     </h1>
                     <p className="text-sm text-muted-foreground">
@@ -94,7 +94,7 @@ export default function AdminDashboard({
                             <CheckCircle className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-amber-600">
+                            <div className="text-2xl font-bold text-primary">
                                 {stats.published_posts}
                             </div>
                         </CardContent>
@@ -107,7 +107,7 @@ export default function AdminDashboard({
                             <Clock className="h-4 w-4 text-muted-foreground" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-2xl font-bold text-yellow-600">
+                            <div className="text-2xl font-bold text-primary">
                                 {stats.pending_posts}
                             </div>
                         </CardContent>

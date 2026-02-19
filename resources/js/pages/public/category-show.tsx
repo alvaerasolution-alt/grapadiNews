@@ -2,6 +2,7 @@ import { Link } from '@inertiajs/react';
 import PublicLayout from '@/layouts/public-layout';
 import Seo from '@/components/seo';
 import CategoryBadge from '@/components/category-badge';
+import LazyImage from '@/components/lazy-image';
 import { Separator } from '@/components/ui/separator';
 import type { PaginatedResponse } from '@/types';
 import AdSlot, { type BannerItem } from '@/components/ad-slot';
@@ -46,19 +47,11 @@ function ArticleCard({ post }: { post: PostCard }) {
             className="group flex flex-col overflow-hidden rounded-xl border border-gray-800 bg-[#1A1A1A] transition-shadow hover:shadow-lg hover:shadow-black/30"
         >
             <div className="aspect-video overflow-hidden bg-gray-800">
-                {post.featured_image ? (
-                    <img
-                        src={post.featured_image}
-                        alt={post.title}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-gray-800 text-gray-500">
-                        <span className="text-sm">No image</span>
-                    </div>
-                )}
+                <LazyImage
+                    src={post.featured_image}
+                    alt={post.title}
+                    className="transition-transform duration-300 group-hover:scale-105"
+                />
             </div>
             <div className="flex flex-1 flex-col gap-2 p-4">
                 {post.category && (
@@ -118,7 +111,7 @@ export default function CategoryShow({
             <AdSlot
                 banners={topBanners}
                 layout="horizontal"
-                googleAdSlot="category_top"
+                mgidWidgetKey="category_top"
                 className="mx-auto mt-6 max-w-7xl px-4"
             />
 
@@ -177,7 +170,7 @@ export default function CategoryShow({
                             <AdSlot
                                 banners={sidebarBanners}
                                 layout="vertical"
-                                googleAdSlot="category_sidebar"
+                                mgidWidgetKey="category_sidebar"
                             />
 
                             {/* Categories */}
@@ -191,19 +184,17 @@ export default function CategoryShow({
                                         <Link
                                             key={cat.id}
                                             href={`/category/${cat.slug}`}
-                                            className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${
-                                                cat.slug === category.slug
-                                                    ? 'bg-amber-900/40 font-semibold text-amber-400'
-                                                    : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
-                                            }`}
+                                            className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm transition-colors ${cat.slug === category.slug
+                                                ? 'bg-amber-900/40 font-semibold text-amber-400'
+                                                : 'text-gray-400 hover:bg-white/5 hover:text-gray-200'
+                                                }`}
                                         >
                                             <span>{cat.name}</span>
                                             <span
-                                                className={`text-xs ${
-                                                    cat.slug === category.slug
-                                                        ? 'text-amber-500'
-                                                        : 'text-gray-600'
-                                                }`}
+                                                className={`text-xs ${cat.slug === category.slug
+                                                    ? 'text-amber-500'
+                                                    : 'text-gray-600'
+                                                    }`}
                                             >
                                                 {cat.posts_count}
                                             </span>

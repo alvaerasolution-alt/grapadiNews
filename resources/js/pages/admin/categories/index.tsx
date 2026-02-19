@@ -1,9 +1,18 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import { useState } from 'react';
 import AppLayout from '@/layouts/app-layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Plus, Edit, Trash2 } from 'lucide-react';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from '@/components/ui/dialog';
 import type { BreadcrumbItem, PaginatedResponse } from '@/types';
 
 interface CategoryWithCount {
@@ -26,11 +35,20 @@ const breadcrumbs: BreadcrumbItem[] = [
 export default function AdminCategoriesIndex({
     categories,
 }: AdminCategoriesIndexProps) {
-    const { flash } = usePage().props;
+    const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+    const [categoryToDelete, setCategoryToDelete] =
+        useState<CategoryWithCount | null>(null);
 
-    function handleDelete(id: number) {
-        if (confirm('Are you sure you want to delete this category?')) {
-            router.delete(`/admin/categories/${id}`);
+    function handleDeleteClick(category: CategoryWithCount) {
+        setCategoryToDelete(category);
+        setDeleteDialogOpen(true);
+    }
+
+    function confirmDelete() {
+        if (categoryToDelete) {
+            router.delete(`/admin/categories/${categoryToDelete.slug}`);
+            setDeleteDialogOpen(false);
+            setCategoryToDelete(null);
         }
     }
 
@@ -38,17 +56,6 @@ export default function AdminCategoriesIndex({
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Manage Categories" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
-                {flash.success && (
-                    <Alert>
-                        <AlertDescription>{flash.success}</AlertDescription>
-                    </Alert>
-                )}
-                {flash.error && (
-                    <Alert variant="destructive">
-                        <AlertDescription>{flash.error}</AlertDescription>
-                    </Alert>
-                )}
-
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                     <div>
                         <h1 className="text-2xl font-bold tracking-tight">
@@ -128,8 +135,8 @@ export default function AdminCategoriesIndex({
                                                             size="icon"
                                                             className="h-8 w-8 text-destructive hover:text-destructive"
                                                             onClick={() =>
-                                                                handleDelete(
-                                                                    category.id,
+                                                                handleDeleteClick(
+                                                                    category,
                                                                 )
                                                             }
                                                         >
@@ -181,6 +188,53 @@ export default function AdminCategoriesIndex({
                         )}
                     </CardContent>
                 </Card>
+
+                {/* Delete Confirmation Dialog */}
+                <Dialog
+                    open={deleteDialogOpen}
+                    onOpenChange={setDeleteDialogOpen}
+                >
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Delete Category</DialogTitle>
+                            <DialogDescription>
+                                {categoryToDelete?.posts_count &&
+                                categoryToDelete.posts_count > 0 ? (
+                                    <span className="text-red-500">
+                                        Cannot delete &quot;
+                                        {categoryToDelete.name}&quot; because it
+                                        has {categoryToDelete.posts_count}{' '}
+                                        posts. Please move or delete the posts
+                                        first.
+                                    </span>
+                                ) : (
+                                    <span>
+                                        Are you sure you want to delete &quot;
+                                        {categoryToDelete?.name}&quot;? This
+                                        action cannot be undone.
+                                    </span>
+                                )}
+                            </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                            <Button
+                                variant="outline"
+                                onClick={() => setDeleteDialogOpen(false)}
+                            >
+                                Cancel
+                            </Button>
+                            {(!categoryToDelete?.posts_count ||
+                                categoryToDelete.posts_count === 0) && (
+                                <Button
+                                    variant="destructive"
+                                    onClick={confirmDelete}
+                                >
+                                    Delete
+                                </Button>
+                            )}
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
             </div>
         </AppLayout>
     );

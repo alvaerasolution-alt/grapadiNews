@@ -11,44 +11,44 @@ class GoogleAdsSettingsSeeder extends Seeder
     {
         $settings = [
             [
-                'key' => 'google_adsense_publisher_id',
+                'key' => 'mgid_site_id',
                 'value' => '',
-                'description' => 'Google AdSense Publisher ID (contoh: ca-pub-1234567890123456). Kosongkan jika belum ada.',
+                'description' => 'MGID Site ID — domain Anda yang terdaftar di MGID (contoh: site.com). Kosongkan jika belum ada.',
             ],
             [
-                'key' => 'google_ad_slot_article_top',
+                'key' => 'mgid_widget_article_top',
                 'value' => '',
-                'description' => 'Ad Unit ID untuk slot Atas Artikel.',
+                'description' => 'MGID Widget ID untuk slot Atas Artikel.',
             ],
             [
-                'key' => 'google_ad_slot_article_bottom',
+                'key' => 'mgid_widget_article_bottom',
                 'value' => '',
-                'description' => 'Ad Unit ID untuk slot Bawah Artikel.',
+                'description' => 'MGID Widget ID untuk slot Bawah Artikel.',
             ],
             [
-                'key' => 'google_ad_slot_home_hero_below',
+                'key' => 'mgid_widget_home_hero_below',
                 'value' => '',
-                'description' => 'Ad Unit ID untuk slot Home — Bawah Hero.',
+                'description' => 'MGID Widget ID untuk slot Home — Bawah Hero.',
             ],
             [
-                'key' => 'google_ad_slot_home_sidebar',
+                'key' => 'mgid_widget_home_sidebar',
                 'value' => '',
-                'description' => 'Ad Unit ID untuk slot Home — Sidebar.',
+                'description' => 'MGID Widget ID untuk slot Home — Sidebar.',
             ],
             [
-                'key' => 'google_ad_slot_home_feed_inline',
+                'key' => 'mgid_widget_home_feed_inline',
                 'value' => '',
-                'description' => 'Ad Unit ID untuk slot Home — Sisipan Feed.',
+                'description' => 'MGID Widget ID untuk slot Home — Sisipan Feed.',
             ],
             [
-                'key' => 'google_ad_slot_category_top',
+                'key' => 'mgid_widget_category_top',
                 'value' => '',
-                'description' => 'Ad Unit ID untuk slot Kategori — Atas.',
+                'description' => 'MGID Widget ID untuk slot Kategori — Atas.',
             ],
             [
-                'key' => 'google_ad_slot_category_sidebar',
+                'key' => 'mgid_widget_category_sidebar',
                 'value' => '',
-                'description' => 'Ad Unit ID untuk slot Kategori — Sidebar.',
+                'description' => 'MGID Widget ID untuk slot Kategori — Sidebar.',
             ],
         ];
 

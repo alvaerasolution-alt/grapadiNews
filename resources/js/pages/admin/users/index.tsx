@@ -12,7 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Search, Award } from 'lucide-react';
+import { Search, Award, Plus } from 'lucide-react';
 import { useState } from 'react';
 import type { BreadcrumbItem, PaginatedResponse } from '@/types';
 
@@ -126,6 +126,12 @@ export default function AdminUsersIndex({
                             </SelectItem>
                         </SelectContent>
                     </Select>
+                    <Link href="/admin/users/create">
+                        <Button className="gap-2">
+                            <Plus className="h-4 w-4" />
+                            Create User
+                        </Button>
+                    </Link>
                 </div>
 
                 <Card>

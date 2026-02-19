@@ -3,6 +3,7 @@ import { ArrowRight, TrendingUp } from 'lucide-react';
 import PublicLayout from '@/layouts/public-layout';
 import Seo, { createWebSiteJsonLd } from '@/components/seo';
 import CategoryBadge from '@/components/category-badge';
+import LazyImage from '@/components/lazy-image';
 import { Separator } from '@/components/ui/separator';
 import type { PaginatedResponse } from '@/types';
 import AdSlot, { type BannerItem } from '@/components/ad-slot';
@@ -64,19 +65,11 @@ function ArticleCard({ post }: { post: PostCard }) {
             className="group flex flex-col overflow-hidden rounded-xl border border-gray-800 bg-[#1A1A1A] transition-shadow hover:shadow-lg hover:shadow-black/30"
         >
             <div className="aspect-video overflow-hidden bg-gray-800">
-                {post.featured_image ? (
-                    <img
-                        src={post.featured_image}
-                        alt={post.title}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-gray-800 text-gray-500">
-                        <span className="text-sm">No image</span>
-                    </div>
-                )}
+                <LazyImage
+                    src={post.featured_image}
+                    alt={post.title}
+                    className="transition-transform duration-300 group-hover:scale-105"
+                />
             </div>
             <div className="flex flex-1 flex-col gap-2 p-4">
                 {post.category && (
@@ -109,19 +102,11 @@ function CompactArticleCard({ post }: { post: PostCard }) {
             className="group flex gap-4 rounded-lg border border-gray-800/60 bg-[#1A1A1A] p-3 transition-colors hover:bg-white/5"
         >
             <div className="h-20 w-28 shrink-0 overflow-hidden rounded-lg bg-gray-800 sm:h-24 sm:w-36">
-                {post.featured_image ? (
-                    <img
-                        src={post.featured_image}
-                        alt={post.title}
-                        loading="lazy"
-                        decoding="async"
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                    />
-                ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-gray-800 text-gray-600">
-                        <span className="text-xs">No img</span>
-                    </div>
-                )}
+                <LazyImage
+                    src={post.featured_image}
+                    alt={post.title}
+                    className="transition-transform duration-300 group-hover:scale-105"
+                />
             </div>
             <div className="flex min-w-0 flex-1 flex-col justify-center gap-1.5">
                 {post.category && (
@@ -188,16 +173,13 @@ export default function Home({
                             className="group relative overflow-hidden rounded-xl lg:col-span-3"
                         >
                             <div className="aspect-[16/9] lg:aspect-auto lg:h-full lg:min-h-[420px]">
-                                {hero.featured_image ? (
-                                    <img
-                                        src={hero.featured_image}
-                                        alt={hero.title}
-                                        fetchPriority="high"
-                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                    />
-                                ) : (
-                                    <div className="h-full w-full bg-gray-800" />
-                                )}
+                                <LazyImage
+                                    src={hero.featured_image}
+                                    alt={hero.title}
+                                    priority
+                                    fetchPriority="high"
+                                    className="transition-transform duration-500 group-hover:scale-105"
+                                />
                             </div>
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                             <div className="absolute bottom-0 flex flex-col gap-3 p-6">
@@ -226,17 +208,11 @@ export default function Home({
                                     className="group relative overflow-hidden rounded-xl"
                                 >
                                     <div className="aspect-[4/3]">
-                                        {post.featured_image ? (
-                                            <img
-                                                src={post.featured_image}
-                                                alt={post.title}
-                                                loading="lazy"
-                                                decoding="async"
-                                                className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-                                            />
-                                        ) : (
-                                            <div className="h-full w-full bg-gray-800" />
-                                        )}
+                                        <LazyImage
+                                            src={post.featured_image}
+                                            alt={post.title}
+                                            className="transition-transform duration-300 group-hover:scale-105"
+                                        />
                                     </div>
                                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
                                     <div className="absolute bottom-0 flex flex-col gap-1.5 p-3">
@@ -262,7 +238,7 @@ export default function Home({
             <AdSlot
                 banners={heroBelowBanners}
                 layout="horizontal"
-                googleAdSlot="home_hero_below"
+                mgidWidgetKey="home_hero_below"
                 className="mx-auto mt-6 max-w-7xl px-4"
             />
 
@@ -286,7 +262,7 @@ export default function Home({
                         <AdSlot
                             banners={feedInlineBanners}
                             layout="inline"
-                            googleAdSlot="home_feed_inline"
+                            mgidWidgetKey="home_feed_inline"
                             className="my-6"
                         />
 
@@ -302,29 +278,29 @@ export default function Home({
                         {/* Pagination */}
                         {(latestPosts.prev_page_url ||
                             latestPosts.next_page_url) && (
-                            <div className="mt-8 flex items-center justify-between">
-                                {latestPosts.prev_page_url ? (
-                                    <Link
-                                        href={latestPosts.prev_page_url}
-                                        className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-white/5"
-                                    >
-                                        &larr; Previous
-                                    </Link>
-                                ) : (
-                                    <span />
-                                )}
-                                {latestPosts.next_page_url ? (
-                                    <Link
-                                        href={latestPosts.next_page_url}
-                                        className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-white/5"
-                                    >
-                                        Next &rarr;
-                                    </Link>
-                                ) : (
-                                    <span />
-                                )}
-                            </div>
-                        )}
+                                <div className="mt-8 flex items-center justify-between">
+                                    {latestPosts.prev_page_url ? (
+                                        <Link
+                                            href={latestPosts.prev_page_url}
+                                            className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-white/5"
+                                        >
+                                            &larr; Previous
+                                        </Link>
+                                    ) : (
+                                        <span />
+                                    )}
+                                    {latestPosts.next_page_url ? (
+                                        <Link
+                                            href={latestPosts.next_page_url}
+                                            className="rounded-lg border border-gray-700 px-4 py-2 text-sm font-medium text-gray-300 hover:bg-white/5"
+                                        >
+                                            Next &rarr;
+                                        </Link>
+                                    ) : (
+                                        <span />
+                                    )}
+                                </div>
+                            )}
                     </div>
 
                     {/* Trending Sidebar */}
@@ -334,7 +310,7 @@ export default function Home({
                             <AdSlot
                                 banners={sidebarBanners}
                                 layout="vertical"
-                                googleAdSlot="home_sidebar"
+                                mgidWidgetKey="home_sidebar"
                             />
 
                             {/* Trending */}
@@ -460,7 +436,7 @@ export default function Home({
                                 <AdSlot
                                     banners={homeMidBanners}
                                     layout="inline"
-                                    googleAdSlot="home_mid_section"
+                                    mgidWidgetKey="home_mid_section"
                                     className="my-8"
                                 />
                             )}
