@@ -30,6 +30,12 @@
         @viteReactRefresh
         @vite(['resources/js/app.tsx', "resources/js/pages/{$page['component']}.tsx"])
         @inertiaHead
+
+        {{-- MGID Global Loader Script --}}
+        @if(env('MGID_SITE_ID'))
+            <link rel="dns-prefetch" href="https://jsc.mgid.com">
+            <script src="https://jsc.mgid.com/site/{{ env('MGID_SITE_ID') }}.js" async></script>
+        @endif
     </head>
     <body class="font-sans antialiased">
         @inertia

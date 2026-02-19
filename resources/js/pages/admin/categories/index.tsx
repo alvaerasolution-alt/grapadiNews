@@ -117,7 +117,7 @@ export default function AdminCategoriesIndex({
                                                 <td className="p-4 text-right align-middle">
                                                     <div className="flex justify-end gap-2">
                                                         <Link
-                                                            href={`/admin/categories/${category.id}/edit`}
+                                                            href={`/admin/categories/${category.slug}/edit`}
                                                         >
                                                             <Button
                                                                 variant="ghost"

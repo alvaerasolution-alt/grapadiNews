@@ -1,4 +1,4 @@
-import { Head, Link, useForm, usePage } from '@inertiajs/react';
+import { Head, Link, router, useForm, usePage } from '@inertiajs/react';
 import { FormEvent, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -33,10 +33,10 @@ interface Props {
 export default function WebSettingsPage({ settings }: Props) {
     const { flash } = usePage().props as any;
     const [logoPreview, setLogoPreview] = useState<string | null>(
-        settings.site_logo ? `/storage/${settings.site_logo}` : null,
+        settings.site_logo ? settings.site_logo : null,
     );
     const [faviconPreview, setFaviconPreview] = useState<string | null>(
-        settings.favicon ? `/storage/${settings.favicon}` : null,
+        settings.favicon ? settings.favicon : null,
     );
 
     const { data, setData, post, processing, errors } = useForm({
@@ -98,12 +98,6 @@ export default function WebSettingsPage({ settings }: Props) {
                             className="border-b-2 border-amber-500 px-1 py-4 text-sm font-medium text-amber-600"
                         >
                             Web Settings
-                        </Link>
-                        <Link
-                            href="/admin/settings/ads"
-                            className="border-b-2 border-transparent px-1 py-4 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
-                        >
-                            Ads Settings
                         </Link>
                     </nav>
                 </div>
@@ -197,8 +191,9 @@ export default function WebSettingsPage({ settings }: Props) {
                                                             'Are you sure you want to remove the logo?',
                                                         )
                                                     ) {
-                                                        window.location.href =
-                                                            '/admin/settings/web/logo/delete';
+                                                        router.delete(
+                                                            '/admin/settings/web/logo/delete',
+                                                        );
                                                     }
                                                 }}
                                             >
@@ -252,8 +247,9 @@ export default function WebSettingsPage({ settings }: Props) {
                                                             'Are you sure you want to remove the favicon?',
                                                         )
                                                     ) {
-                                                        window.location.href =
-                                                            '/admin/settings/web/favicon/delete';
+                                                        router.delete(
+                                                            '/admin/settings/web/favicon/delete',
+                                                        );
                                                     }
                                                 }}
                                             >

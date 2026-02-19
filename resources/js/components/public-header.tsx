@@ -185,7 +185,7 @@ function SearchOverlay({ onClose }: { onClose: () => void }) {
 }
 
 export default function PublicHeader() {
-    const { auth, navCategories, webSettings } = usePage().props as {
+    const { auth, navCategories, webSettings } = usePage().props as unknown as {
         auth: any;
         navCategories: any[];
         webSettings: { site_name: string; site_logo: string | null };
@@ -219,9 +219,8 @@ export default function PublicHeader() {
     return (
         <>
             <header
-                className={`sticky top-0 z-50 w-full bg-[#111111] transition-shadow duration-200 ${
-                    isScrolled ? 'shadow-lg shadow-black/30' : ''
-                }`}
+                className={`sticky top-0 z-50 w-full bg-[#111111] transition-shadow duration-200 ${isScrolled ? 'shadow-lg shadow-black/30' : ''
+                    }`}
             >
                 {/* Main navbar */}
                 <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4">
@@ -260,7 +259,7 @@ export default function PublicHeader() {
                                         >
                                             {webSettings?.site_logo ? (
                                                 <img
-                                                    src={`/storage/${webSettings.site_logo}`}
+                                                    src={webSettings.site_logo}
                                                     alt={webSettings.site_name}
                                                     className="h-8 w-auto object-contain"
                                                 />
@@ -345,7 +344,7 @@ export default function PublicHeader() {
                         <Link href="/" className="flex items-center gap-2">
                             {webSettings?.site_logo ? (
                                 <img
-                                    src={`/storage/${webSettings.site_logo}`}
+                                    src={webSettings.site_logo}
                                     alt={webSettings.site_name}
                                     className="h-8 w-auto object-contain"
                                 />

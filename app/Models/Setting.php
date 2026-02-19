@@ -74,33 +74,21 @@ class Setting extends Model
         return Cache::remember('settings.web', 3600, function () {
             $settings = static::web()->pluck('value', 'key')->toArray();
 
+            $logo = $settings['site_logo'] ?? null;
+            $favicon = $settings['favicon'] ?? null;
+
             return [
                 'site_name' => $settings['site_name'] ?? self::DEFAULT_SITE_NAME,
-                'site_logo' => $settings['site_logo'] ?? null,
+                'site_logo' => $logo ? asset('storage/'.$logo) : null,
                 'site_tagline' => $settings['site_tagline'] ?? self::DEFAULT_SITE_TAGLINE,
                 'footer_text' => $settings['footer_text'] ?? self::DEFAULT_FOOTER_TEXT,
-                'favicon' => $settings['favicon'] ?? null,
-            ];
-        });
-    }
-
-    /**
-     * Get all ads settings as array.
-     */
-    public static function getAdSettings(): array
-    {
-        return Cache::remember('settings.ads', 3600, function () {
-            $settings = static::ads()->pluck('value', 'key')->toArray();
-
-            return [
-                'mgid_site_id' => $settings['mgid_site_id'] ?? null,
-                'mgid_widget_article_top' => $settings['mgid_widget_article_top'] ?? null,
-                'mgid_widget_article_bottom' => $settings['mgid_widget_article_bottom'] ?? null,
-                'mgid_widget_home_hero_below' => $settings['mgid_widget_home_hero_below'] ?? null,
-                'mgid_widget_home_sidebar' => $settings['mgid_widget_home_sidebar'] ?? null,
-                'mgid_widget_home_feed_inline' => $settings['mgid_widget_home_feed_inline'] ?? null,
-                'mgid_widget_category_top' => $settings['mgid_widget_category_top'] ?? null,
-                'mgid_widget_category_sidebar' => $settings['mgid_widget_category_sidebar'] ?? null,
+                'favicon' => $favicon ? asset('storage/'.$favicon) : null,
+                'social_facebook' => $settings['social_facebook'] ?? null,
+                'social_instagram' => $settings['social_instagram'] ?? null,
+                'social_twitter' => $settings['social_twitter'] ?? null,
+                'social_youtube' => $settings['social_youtube'] ?? null,
+                'social_tiktok' => $settings['social_tiktok'] ?? null,
+                'social_linkedin' => $settings['social_linkedin'] ?? null,
             ];
         });
     }

@@ -91,11 +91,6 @@ const adminNavItems: NavItem[] = [
         href: '/admin/settings/web',
         icon: Settings,
     },
-    {
-        title: 'Ads Settings',
-        href: '/admin/settings/ads',
-        icon: Settings,
-    },
 ];
 
 const footerNavItems: NavItem[] = [];

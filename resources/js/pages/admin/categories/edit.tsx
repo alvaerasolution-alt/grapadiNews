@@ -34,13 +34,13 @@ export default function AdminCategoriesEdit({
         { title: 'Categories', href: '/admin/categories' },
         {
             title: `Edit: ${category.name}`,
-            href: `/admin/categories/${category.id}/edit`,
+            href: `/admin/categories/${category.slug}/edit`,
         },
     ];
 
     function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
         e.preventDefault();
-        put(`/admin/categories/${category.id}`);
+        put(`/admin/categories/${category.slug}`);
     }
 
     return (

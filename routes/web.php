@@ -3,7 +3,6 @@
 use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPostController;
-use App\Http\Controllers\Admin\AdSettingController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\RedemptionItemController;
 use App\Http\Controllers\Admin\RedemptionRequestController;
@@ -74,8 +73,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::delete('settings/web/logo/delete', [WebSettingController::class, 'destroyLogo'])->name('settings.web.logo.delete');
         Route::delete('settings/web/favicon/delete', [WebSettingController::class, 'destroyFavicon'])->name('settings.web.favicon.delete');
 
-        Route::get('settings/ads', [AdSettingController::class, 'index'])->name('settings.ads');
-        Route::post('settings/ads', [AdSettingController::class, 'update'])->name('settings.ads.update');
 
         // Settings - Legacy (deprecated, redirect to new)
         Route::get('settings', function () {

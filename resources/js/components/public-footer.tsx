@@ -86,7 +86,7 @@ export default function PublicFooter() {
                         <Link href="/" className="flex items-center gap-2">
                             {webSettings?.site_logo ? (
                                 <img
-                                    src={`/storage/${webSettings.site_logo}`}
+                                    src={webSettings.site_logo}
                                     alt={siteName}
                                     className="h-8 w-auto object-contain"
                                 />

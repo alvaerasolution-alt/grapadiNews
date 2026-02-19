@@ -2,6 +2,7 @@ import { useState, useEffect, type ReactNode } from 'react';
 import { router } from '@inertiajs/react';
 import PublicHeader from '@/components/public-header';
 import PublicFooter from '@/components/public-footer';
+import CurrencyWidget from '@/components/currency-widget';
 import { Toaster } from '@/components/toaster';
 
 interface PublicLayoutProps {
@@ -41,6 +42,7 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 )}
                 {children}
             </main>
+            <CurrencyWidget />
             <PublicFooter />
             <Toaster />
         </div>
