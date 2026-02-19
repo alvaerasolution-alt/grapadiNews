@@ -9,6 +9,7 @@ use App\Models\Category;
 use App\Models\Post;
 use App\Services\UnsplashService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -204,9 +205,13 @@ class PublicPostController extends Controller
 
     private function resolvePostImage(Post $post): ?string
     {
-        // 1. Use manual featured image if set
+        // 1. Use manual featured image if set (stored as relative path)
         if (! empty($post->featured_image)) {
-            return $post->featured_image;
+            // Already a full URL (e.g. Unsplash or previously resolved)
+            if (str_starts_with($post->featured_image, 'http')) {
+                return $post->featured_image;
+            }
+            return Storage::disk('public')->url($post->featured_image);
         }
 
         // 2. Use persisted Unsplash URL if set

@@ -58,9 +58,12 @@ class PublicCategoryController extends Controller
 
     private function resolvePostImage(Post $post): ?string
     {
-        // 1. Use manual featured image if set
+        // 1. Use manual featured image if set (stored as relative path)
         if (! empty($post->featured_image)) {
-            return $post->featured_image;
+            if (str_starts_with($post->featured_image, 'http')) {
+                return $post->featured_image;
+            }
+            return \Illuminate\Support\Facades\Storage::disk('public')->url($post->featured_image);
         }
 
         // 2. Use persisted Unsplash URL if set
@@ -68,8 +71,6 @@ class PublicCategoryController extends Controller
             return $post->unsplash_image_url;
         }
 
-        // Images are fetched by PostObserver on creation
-        // or via: php artisan posts:fetch-unsplash-images
         return null;
     }
 }

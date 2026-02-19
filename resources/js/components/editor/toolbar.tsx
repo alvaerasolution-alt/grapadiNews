@@ -69,6 +69,7 @@ export default function Toolbar({ editor, onImageUpload }: ToolbarProps) {
                         <Button
                             variant="ghost"
                             size="sm"
+                            type="button"
                             onClick={() => editor.chain().focus().undo().run()}
                             disabled={
                                 !editor.can().chain().focus().undo().run()
@@ -85,6 +86,7 @@ export default function Toolbar({ editor, onImageUpload }: ToolbarProps) {
                         <Button
                             variant="ghost"
                             size="sm"
+                            type="button"
                             onClick={() => editor.chain().focus().redo().run()}
                             disabled={
                                 !editor.can().chain().focus().redo().run()
@@ -289,6 +291,7 @@ export default function Toolbar({ editor, onImageUpload }: ToolbarProps) {
                     <Button
                         variant="ghost"
                         size="sm"
+                        type="button"
                         onClick={onImageUpload}
                         className="h-9 px-2"
                     >

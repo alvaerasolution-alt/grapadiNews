@@ -6,6 +6,7 @@ use App\Enums\PostStatus;
 use App\Models\Post;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class SearchController extends Controller
 {
@@ -32,7 +33,7 @@ class SearchController extends Controller
                 'title' => $post->title,
                 'slug' => $post->slug,
                 'excerpt' => $post->excerpt,
-                'featured_image' => $post->featured_image,
+                'featured_image' => $this->resolveImage($post),
                 'published_at_human' => $post->published_at?->diffForHumans(),
                 'category' => $post->category ? [
                     'name' => $post->category->name,
@@ -41,5 +42,13 @@ class SearchController extends Controller
             ]);
 
         return response()->json($posts);
+    }
+
+    private function resolveImage(Post $post): ?string
+    {
+        $image = $post->featured_image ?? $post->unsplash_image_url ?? null;
+        if (! $image) return null;
+        if (str_starts_with($image, 'http')) return $image;
+        return Storage::disk('public')->url($image);
     }
 }
