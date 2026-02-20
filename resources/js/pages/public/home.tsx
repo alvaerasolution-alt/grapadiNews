@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import type { PaginatedResponse } from '@/types';
 import AdSlot, { type BannerItem } from '@/components/ad-slot';
 import AdPopup from '@/components/ad-popup';
+import CurrencyWidget from '@/components/currency-widget';
 
 interface PostCard {
     id: number;
@@ -50,6 +51,7 @@ interface Props {
     trendingPosts: TrendingPost[];
     categories: CategoryWithCount[];
     categoryPosts: CategorySection[];
+    belowNavbarBanners: BannerItem[];
     heroBelowBanners: BannerItem[];
     sidebarBanners: BannerItem[];
     feedInlineBanners: BannerItem[];
@@ -133,7 +135,9 @@ export default function Home({
     featuredPosts,
     latestPosts,
     trendingPosts,
+    categories,
     categoryPosts,
+    belowNavbarBanners,
     heroBelowBanners,
     sidebarBanners,
     feedInlineBanners,
@@ -163,6 +167,21 @@ export default function Home({
                 jsonLd={jsonLd}
             />
 
+            {/* Currency Widget: shown above hero */}
+            <CurrencyWidget />
+
+            {/* Banner: Below Navbar (previously where Below Hero was placed incorrectly) */}
+            {belowNavbarBanners && belowNavbarBanners.length > 0 && (
+                <section className="mx-auto max-w-7xl px-4 pt-4">
+                    <AdSlot
+                        banners={belowNavbarBanners}
+                        layout="horizontal"
+                        linkClassName="w-full"
+                        imageClassName="max-h-[200px] w-full object-cover"
+                    />
+                </section>
+            )}
+
             {/* Hero Featured Section */}
             {hero && (
                 <section className="mx-auto max-w-7xl px-4 pt-6">
@@ -170,17 +189,16 @@ export default function Home({
                         {/* Main hero card */}
                         <Link
                             href={`/${hero.slug}`}
-                            className="group relative overflow-hidden rounded-xl lg:col-span-3"
+                            className="group relative overflow-hidden rounded-xl lg:col-span-3 aspect-[4/3] lg:aspect-auto lg:h-full"
                         >
-                            <div className="aspect-[16/9] lg:aspect-auto lg:h-full lg:min-h-[420px]">
-                                <LazyImage
-                                    src={hero.featured_image}
-                                    alt={hero.title}
-                                    priority
-                                    fetchPriority="high"
-                                    className="transition-transform duration-500 group-hover:scale-105"
-                                />
-                            </div>
+                            <LazyImage
+                                src={hero.featured_image}
+                                alt={hero.title}
+                                priority
+                                fetchPriority="high"
+                                naturalSize
+                                className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
                             <div className="absolute bottom-0 flex flex-col gap-3 p-6">
                                 {hero.category && (
@@ -234,6 +252,19 @@ export default function Home({
                 </section>
             )}
 
+
+            {/* Banner: Below Hero */}
+            {heroBelowBanners && heroBelowBanners.length > 0 && (
+                <section className="mx-auto max-w-7xl px-4 pt-6">
+                    <AdSlot
+                        banners={heroBelowBanners}
+                        layout="horizontal"
+                        mgidWidgetKey="home_hero_below"
+                        linkClassName="w-full"
+                        imageClassName="max-h-[200px] w-full object-cover"
+                    />
+                </section>
+            )}
 
             {/* Latest Articles + Trending Sidebar */}
             <section className="mx-auto max-w-7xl px-4 py-8">

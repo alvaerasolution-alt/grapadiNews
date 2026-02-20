@@ -215,7 +215,7 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
                                     Upload Image
                                 </span>
                                 <span className="text-xs">
-                                    JPG, PNG, GIF, WebP — Max 5MB
+                                    JPG, PNG, GIF, WebP — Max 10MB
                                 </span>
                             </button>
                         )}
@@ -264,10 +264,10 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
                                     setData(
                                         'status',
                                         value as
-                                            | 'draft'
-                                            | 'pending'
-                                            | 'published'
-                                            | 'rejected',
+                                        | 'draft'
+                                        | 'pending'
+                                        | 'published'
+                                        | 'rejected',
                                     )
                                 }
                             >

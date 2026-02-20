@@ -13,6 +13,8 @@ interface AdSlotProps {
     layout?: 'horizontal' | 'vertical' | 'inline';
     mgidWidgetKey?: string;
     className?: string;
+    linkClassName?: string;
+    imageClassName?: string;
 }
 
 export default function AdSlot({
@@ -20,6 +22,8 @@ export default function AdSlot({
     layout = 'horizontal',
     mgidWidgetKey,
     className = '',
+    linkClassName = '',
+    imageClassName = '',
 }: AdSlotProps) {
     const handleClick = useCallback(
         async (banner: BannerItem, e: React.MouseEvent) => {
@@ -98,13 +102,13 @@ export default function AdSlot({
                                 key={banner.id}
                                 href={banner.url}
                                 onClick={(e) => handleClick(banner, e)}
-                                className="group block overflow-hidden rounded-xl transition-shadow hover:shadow-lg"
+                                className={`group block overflow-hidden rounded-xl transition-shadow hover:shadow-lg ${linkClassName}`}
                                 aria-label={`Ad: ${banner.title}`}
                             >
                                 <img
                                     src={`/storage/${banner.image}`}
                                     alt={banner.title}
-                                    className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                                    className={`h-auto w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] ${imageClassName}`}
                                     loading="lazy"
                                 />
                             </a>

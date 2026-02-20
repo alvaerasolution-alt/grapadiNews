@@ -22,7 +22,7 @@ class MediaUploadRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image' => ['required', 'image', 'mimes:jpeg,png,gif,webp', 'max:5120'],
+            'image' => ['required', 'image', 'mimes:jpeg,png,gif,webp', 'max:10240'],
         ];
     }
 
@@ -37,7 +37,7 @@ class MediaUploadRequest extends FormRequest
             'image.required' => 'An image file is required.',
             'image.image' => 'The file must be an image.',
             'image.mimes' => 'The image must be a JPEG, PNG, GIF, or WebP file.',
-            'image.max' => 'The image must not exceed 5MB.',
+            'image.max' => 'The image must not exceed 10MB.',
         ];
     }
 }

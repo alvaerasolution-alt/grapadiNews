@@ -224,12 +224,13 @@ export default function PostShow({
 
                         {/* Featured Image */}
                         {post.featured_image && (
-                            <div className="mt-5 overflow-hidden rounded-xl">
+                            <div className="mt-5 max-h-[520px] overflow-hidden rounded-xl">
                                 <LazyImage
                                     src={post.featured_image}
                                     alt={post.title}
                                     priority
                                     fetchPriority="high"
+                                    className="object-cover"
                                 />
                             </div>
                         )}

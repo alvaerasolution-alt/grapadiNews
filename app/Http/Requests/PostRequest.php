@@ -28,7 +28,7 @@ class PostRequest extends FormRequest
             'excerpt' => ['nullable', 'string', 'max:500'],
             'body' => ['required', 'string'],
             'category_id' => ['required', 'exists:categories,id'],
-            'featured_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:5120'],
+            'featured_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:10240'],
             'status' => ['required', Rule::in($allowedStatuses)],
             'meta_title' => ['nullable', 'string', 'max:60'],
             'meta_description' => ['nullable', 'string', 'max:160'],

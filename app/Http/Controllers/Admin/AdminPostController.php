@@ -51,8 +51,20 @@ class AdminPostController extends Controller
     {
         $post->load(['user:id,name,email', 'category:id,name,slug', 'tags:id,name']);
 
+        // Resolve featured_image to a full URL (stored as a relative path)
+        $featuredImage = null;
+        if (! empty($post->featured_image)) {
+            $featuredImage = str_starts_with($post->featured_image, 'http')
+                ? $post->featured_image
+                : \Illuminate\Support\Facades\Storage::disk('public')->url($post->featured_image);
+        } elseif (! empty($post->unsplash_image_url)) {
+            $featuredImage = $post->unsplash_image_url;
+        }
+
         return Inertia::render('admin/posts/show', [
-            'post' => $post,
+            'post' => array_merge($post->toArray(), [
+                'featured_image' => $featuredImage,
+            ]),
         ]);
     }
 

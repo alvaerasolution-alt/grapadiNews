@@ -93,6 +93,7 @@ class PublicPostController extends Controller
             'trendingPosts' => $trendingPosts,
             'categories' => $categories,
             'categoryPosts' => $categoryPosts,
+            'belowNavbarBanners' => Banner::forSlot(BannerPosition::HomeBelowNavbar),
             'heroBelowBanners' => Banner::forSlot(BannerPosition::HomeHeroBelow),
             'sidebarBanners' => Banner::forSlot(BannerPosition::HomeSidebar),
             'feedInlineBanners' => Banner::forSlot(BannerPosition::HomeFeedInline),

@@ -2,7 +2,6 @@ import { useState, useEffect, type ReactNode } from 'react';
 import { router } from '@inertiajs/react';
 import PublicHeader from '@/components/public-header';
 import PublicFooter from '@/components/public-footer';
-import CurrencyWidget from '@/components/currency-widget';
 import StickyBottomAd from '@/components/sticky-bottom-ad';
 import { Toaster } from '@/components/toaster';
 
@@ -43,7 +42,6 @@ export default function PublicLayout({ children }: PublicLayoutProps) {
                 )}
                 {children}
             </main>
-            <CurrencyWidget />
             <PublicFooter />
             <Toaster />
             <StickyBottomAd mgidWidgetKey="home_hero_below" />

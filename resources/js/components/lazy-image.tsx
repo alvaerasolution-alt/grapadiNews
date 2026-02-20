@@ -13,6 +13,11 @@ interface LazyImageProps {
      * If false, uses lazy + async decoding.
      */
     priority?: boolean;
+    /**
+     * If true, let the image display at its natural dimensions
+     * (no forced h-full / w-full on the container or img).
+     */
+    naturalSize?: boolean;
 }
 
 /**
@@ -28,6 +33,7 @@ export default function LazyImage({
     containerClassName = '',
     fetchPriority,
     priority = false,
+    naturalSize = false,
 }: LazyImageProps) {
     const [loaded, setLoaded] = useState(false);
     const [error, setError] = useState(false);
@@ -64,10 +70,10 @@ export default function LazyImage({
     }
 
     return (
-        <div className={cn('relative h-full w-full', containerClassName)}>
+        <div className={cn(naturalSize ? 'relative' : 'relative h-full w-full', containerClassName)}>
             {/* Skeleton shimmer beneath the image */}
             {!loaded && (
-                <Skeleton className="absolute inset-0 h-full w-full rounded-none" />
+                <Skeleton className={cn('absolute inset-0 rounded-none', naturalSize ? '' : 'h-full w-full')} />
             )}
 
             <img
@@ -79,7 +85,7 @@ export default function LazyImage({
                 onLoad={handleLoad}
                 onError={handleError}
                 className={cn(
-                    'h-full w-full object-cover transition-opacity duration-500',
+                    naturalSize ? 'block w-full transition-opacity duration-500' : 'h-full w-full object-cover transition-opacity duration-500',
                     loaded ? 'opacity-100' : 'opacity-0',
                     className,
                 )}
