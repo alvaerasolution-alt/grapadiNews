@@ -34,6 +34,9 @@ class WebSettingController extends Controller
             'social_youtube' => 'nullable|url|max:255',
             'social_tiktok' => 'nullable|url|max:255',
             'social_linkedin' => 'nullable|url|max:255',
+            'about_us' => 'nullable|string',
+            'disclaimer' => 'nullable|string',
+            'partnership' => 'nullable|string',
         ]);
 
         // Handle site logo upload
@@ -72,6 +75,11 @@ class WebSettingController extends Controller
         Setting::set('social_youtube', $validated['social_youtube'] ?? '', 'web');
         Setting::set('social_tiktok', $validated['social_tiktok'] ?? '', 'web');
         Setting::set('social_linkedin', $validated['social_linkedin'] ?? '', 'web');
+
+        // Update rich text pages settings
+        Setting::set('about_us', $validated['about_us'] ?? '', 'web');
+        Setting::set('disclaimer', $validated['disclaimer'] ?? '', 'web');
+        Setting::set('partnership', $validated['partnership'] ?? '', 'web');
 
         // Clear cache
         Setting::clearCache();

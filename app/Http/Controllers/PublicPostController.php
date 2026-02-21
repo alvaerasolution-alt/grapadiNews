@@ -98,6 +98,8 @@ class PublicPostController extends Controller
             'sidebarBanners' => Banner::forSlot(BannerPosition::HomeSidebar),
             'feedInlineBanners' => Banner::forSlot(BannerPosition::HomeFeedInline),
             'homeMidBanners' => Banner::forSlot(BannerPosition::HomeMidSection),
+            'homeLeftBanners' => Banner::forSlot(BannerPosition::HomeLeftSkin),
+            'homeRightBanners' => Banner::forSlot(BannerPosition::HomeRightSkin),
             'popupBanners' => Banner::forSlot(BannerPosition::GlobalPopup),
         ]);
     }

@@ -13,6 +13,21 @@ interface Position {
     label: string;
 }
 
+const RECOMMENDED_SIZES: Record<string, string> = {
+    article_top: 'Rekomendasi: 728x90 (Desktop), 300x250 (Mobile)',
+    article_bottom: 'Rekomendasi: 728x90 (Desktop), 300x250 (Mobile)',
+    home_below_navbar: 'Rekomendasi: 970x90 atau 728x90 (Horizontal)',
+    home_hero_below: 'Rekomendasi: 970x90 atau 728x90 (Horizontal)',
+    home_sidebar: 'Rekomendasi: 300x250 atau 300x600 (Square/Vertical)',
+    home_feed_inline: 'Rekomendasi: 728x90 (Desktop), 300x250 (Mobile)',
+    home_left_skin: 'Rekomendasi: 160x600 atau 300x600 (Vertical/Skycraper)',
+    home_right_skin: 'Rekomendasi: 160x600 atau 300x600 (Vertical/Skycraper)',
+    category_top: 'Rekomendasi: 970x90 atau 728x90 (Horizontal)',
+    category_sidebar: 'Rekomendasi: 300x250 atau 300x600 (Square/Vertical)',
+    home_mid_section: 'Rekomendasi: 970x90 atau 728x90 (Horizontal)',
+    global_popup: 'Rekomendasi: 300x250 atau 336x280 (Square)',
+};
+
 export default function AdminBannersCreate({
     positions,
 }: {
@@ -103,7 +118,9 @@ export default function AdminBannersCreate({
 
                     {/* URL */}
                     <div className="space-y-2">
-                        <Label htmlFor="url">URL Link</Label>
+                        <Label htmlFor="url">
+                            URL Link <span className="text-xs text-gray-400">(opsional)</span>
+                        </Label>
                         <Input
                             id="url"
                             value={data.url}
@@ -130,6 +147,9 @@ export default function AdminBannersCreate({
                                 </option>
                             ))}
                         </select>
+                        <p className="text-xs text-amber-600 dark:text-amber-500 font-medium">
+                            {RECOMMENDED_SIZES[data.position] || 'Pilih posisi banner'}
+                        </p>
                         <InputError message={errors.position} />
                     </div>
 

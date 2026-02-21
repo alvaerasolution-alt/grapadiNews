@@ -21,6 +21,12 @@ class Setting extends Model
 
     public const DEFAULT_FOOTER_TEXT = '© {year} GrapadiNews. All rights reserved.';
 
+    public const DEFAULT_ABOUT_US = '';
+    
+    public const DEFAULT_DISCLAIMER = '';
+    
+    public const DEFAULT_PARTNERSHIP = '';
+
     /**
      * Scope for web settings.
      */
@@ -89,6 +95,9 @@ class Setting extends Model
                 'social_youtube' => $settings['social_youtube'] ?? null,
                 'social_tiktok' => $settings['social_tiktok'] ?? null,
                 'social_linkedin' => $settings['social_linkedin'] ?? null,
+                'about_us' => $settings['about_us'] ?? self::DEFAULT_ABOUT_US,
+                'disclaimer' => $settings['disclaimer'] ?? self::DEFAULT_DISCLAIMER,
+                'partnership' => $settings['partnership'] ?? self::DEFAULT_PARTNERSHIP,
             ];
         });
     }

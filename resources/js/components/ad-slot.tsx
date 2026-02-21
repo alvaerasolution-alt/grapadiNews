@@ -27,6 +27,10 @@ export default function AdSlot({
 }: AdSlotProps) {
     const handleClick = useCallback(
         async (banner: BannerItem, e: React.MouseEvent) => {
+            if (!banner.url) {
+                e.preventDefault();
+                return;
+            }
             e.preventDefault();
             try {
                 await fetch(`/banners/${banner.id}/click`, {
@@ -58,61 +62,79 @@ export default function AdSlot({
             {hasManualBanners && (
                 <>
                     {layout === 'vertical' &&
-                        banners.map((banner) => (
-                            <a
-                                key={banner.id}
-                                href={banner.url}
-                                onClick={(e) => handleClick(banner, e)}
-                                className="group block overflow-hidden rounded-xl border border-gray-800 transition-shadow hover:shadow-md"
-                                aria-label={`Ad: ${banner.title}`}
-                            >
-                                <img
-                                    src={`/storage/${banner.image}`}
-                                    alt={banner.title}
-                                    className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
-                                    loading="lazy"
-                                />
-                            </a>
-                        ))}
+                        banners.map((banner) => {
+                            const Wrapper = banner.url ? 'a' : 'div';
+                            const wrapperProps = banner.url
+                                ? { href: banner.url, onClick: (e: React.MouseEvent) => handleClick(banner, e) }
+                                : {};
 
-                    {layout === 'inline' && (
-                        <div className="overflow-hidden rounded-xl border border-dashed border-gray-700 bg-[#1A1A1A]">
-                            {banners.map((banner) => (
-                                <a
+                            return (
+                                <Wrapper
                                     key={banner.id}
-                                    href={banner.url}
-                                    onClick={(e) => handleClick(banner, e)}
-                                    className="group block"
+                                    {...wrapperProps}
+                                    className="group block overflow-hidden rounded-xl border border-gray-800 transition-shadow hover:shadow-md"
                                     aria-label={`Ad: ${banner.title}`}
                                 >
                                     <img
                                         src={`/storage/${banner.image}`}
                                         alt={banner.title}
-                                        className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+                                        className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                                         loading="lazy"
                                     />
-                                </a>
-                            ))}
+                                </Wrapper>
+                            );
+                        })}
+
+                    {layout === 'inline' && (
+                        <div className="overflow-hidden rounded-xl border border-dashed border-gray-700 bg-[#1A1A1A]">
+                            {banners.map((banner) => {
+                                const Wrapper = banner.url ? 'a' : 'div';
+                                const wrapperProps = banner.url
+                                    ? { href: banner.url, onClick: (e: React.MouseEvent) => handleClick(banner, e) }
+                                    : {};
+
+                                return (
+                                    <Wrapper
+                                        key={banner.id}
+                                        {...wrapperProps}
+                                        className="group block"
+                                        aria-label={`Ad: ${banner.title}`}
+                                    >
+                                        <img
+                                            src={`/storage/${banner.image}`}
+                                            alt={banner.title}
+                                            className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+                                            loading="lazy"
+                                        />
+                                    </Wrapper>
+                                );
+                            })}
                         </div>
                     )}
 
                     {layout === 'horizontal' &&
-                        banners.map((banner) => (
-                            <a
-                                key={banner.id}
-                                href={banner.url}
-                                onClick={(e) => handleClick(banner, e)}
-                                className={`group block overflow-hidden rounded-xl transition-shadow hover:shadow-lg ${linkClassName}`}
-                                aria-label={`Ad: ${banner.title}`}
-                            >
-                                <img
-                                    src={`/storage/${banner.image}`}
-                                    alt={banner.title}
-                                    className={`h-auto w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] ${imageClassName}`}
-                                    loading="lazy"
-                                />
-                            </a>
-                        ))}
+                        banners.map((banner) => {
+                            const Wrapper = banner.url ? 'a' : 'div';
+                            const wrapperProps = banner.url
+                                ? { href: banner.url, onClick: (e: React.MouseEvent) => handleClick(banner, e) }
+                                : {};
+
+                            return (
+                                <Wrapper
+                                    key={banner.id}
+                                    {...wrapperProps}
+                                    className={`group block overflow-hidden rounded-xl transition-shadow hover:shadow-lg ${linkClassName}`}
+                                    aria-label={`Ad: ${banner.title}`}
+                                >
+                                    <img
+                                        src={`/storage/${banner.image}`}
+                                        alt={banner.title}
+                                        className={`h-auto w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] ${imageClassName}`}
+                                        loading="lazy"
+                                    />
+                                </Wrapper>
+                            );
+                        })}
                 </>
             )}
 

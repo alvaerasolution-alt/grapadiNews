@@ -80,9 +80,9 @@ export default function PublicFooter() {
     return (
         <footer className="border-t border-gray-800 bg-gray-900 text-gray-300">
             <div className="mx-auto max-w-7xl px-4 py-12">
-                <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                     {/* Brand */}
-                    <div>
+                    <div className="lg:col-span-1">
                         <Link href="/" className="flex items-center gap-2">
                             {webSettings?.site_logo ? (
                                 <img
@@ -102,6 +102,39 @@ export default function PublicFooter() {
                         <p className="mt-3 text-sm leading-relaxed text-gray-400">
                             {footerText}
                         </p>
+                    </div>
+
+                    {/* Information */}
+                    <div>
+                        <h3 className="mb-3 text-sm font-semibold tracking-wider text-white uppercase">
+                            Informasi
+                        </h3>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link
+                                    href="/tentang-kami"
+                                    className="text-sm text-gray-400 transition-colors hover:text-amber-400"
+                                >
+                                    Tentang Kami
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/disclaimer"
+                                    className="text-sm text-gray-400 transition-colors hover:text-amber-400"
+                                >
+                                    Disclaimer
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/kerjasama"
+                                    className="text-sm text-gray-400 transition-colors hover:text-amber-400"
+                                >
+                                    Kerjasama
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
 
                     {/* Categories — dynamic from database */}

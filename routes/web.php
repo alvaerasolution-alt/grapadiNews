@@ -28,6 +28,11 @@ Route::get('/', [PublicPostController::class, 'index'])->name('home');
 Route::get('/category/{category:slug}', [PublicCategoryController::class, 'show'])->name('category.show');
 Route::get('/search', [SearchController::class, 'search'])->name('search');
 
+// Static pages
+Route::get('/tentang-kami', fn () => \Inertia\Inertia::render('public/about'))->name('about');
+Route::get('/disclaimer', fn () => \Inertia\Inertia::render('public/disclaimer'))->name('disclaimer');
+Route::get('/kerjasama', fn () => \Inertia\Inertia::render('public/partnership'))->name('partnership');
+
 // Legacy redirect: /article/{slug} -> /{slug} (301 for SEO)
 Route::get('/article/{slug}', fn (string $slug) => redirect("/{$slug}", 301));
 

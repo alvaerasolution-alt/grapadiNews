@@ -10,6 +10,8 @@ enum BannerPosition: string
     case HomeHeroBelow = 'home_hero_below';
     case HomeSidebar = 'home_sidebar';
     case HomeFeedInline = 'home_feed_inline';
+    case HomeLeftSkin = 'home_left_skin';
+    case HomeRightSkin = 'home_right_skin';
     case CategoryTop = 'category_top';
     case CategorySidebar = 'category_sidebar';
     case HomeMidSection = 'home_mid_section';
@@ -25,6 +27,8 @@ enum BannerPosition: string
             self::HomeSidebar => 'Home — Sidebar',
             self::HomeFeedInline => 'Home — Sisipan Feed',
             self::HomeMidSection => 'Home — Antar Section',
+            self::HomeLeftSkin => 'Home — Sisi Kiri',
+            self::HomeRightSkin => 'Home — Sisi Kanan',
             self::CategoryTop => 'Kategori — Atas',
             self::CategorySidebar => 'Kategori — Sidebar',
             self::GlobalPopup => 'Popup Global',

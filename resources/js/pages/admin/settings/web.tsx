@@ -11,6 +11,7 @@ import {
     CardTitle,
 } from '@/components/ui/card';
 import AppLayout from '@/layouts/app-layout';
+import TiptapEditor from '@/components/editor/tiptap-editor';
 
 interface WebSettings {
     site_name: string;
@@ -24,6 +25,9 @@ interface WebSettings {
     social_youtube: string | null;
     social_tiktok: string | null;
     social_linkedin: string | null;
+    about_us: string;
+    disclaimer: string;
+    partnership: string;
 }
 
 interface Props {
@@ -51,6 +55,9 @@ export default function WebSettingsPage({ settings }: Props) {
         social_youtube: settings.social_youtube || '',
         social_tiktok: settings.social_tiktok || '',
         social_linkedin: settings.social_linkedin || '',
+        about_us: settings.about_us || '',
+        disclaimer: settings.disclaimer || '',
+        partnership: settings.partnership || '',
     });
 
     const handleSubmit = (e: FormEvent) => {
@@ -490,6 +497,79 @@ export default function WebSettingsPage({ settings }: Props) {
                                     {errors.social_linkedin && (
                                         <p className="text-sm text-red-500">
                                             {errors.social_linkedin}
+                                        </p>
+                                    )}
+                                </div>
+                            </CardContent>
+                        </Card>
+
+                        {/* Information Pages Settings */}
+                        <Card>
+                            <CardHeader>
+                                <CardTitle>Halaman Informasi</CardTitle>
+                                <CardDescription>
+                                    Atur isi konten untuk halaman Tentang Kami,
+                                    Disclaimer, dan Kerjasama menggunakan format
+                                    Rich Text.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="space-y-6">
+                                {/* About Us */}
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Tentang Kami
+                                    </label>
+                                    <div className="rounded-md border border-input">
+                                        <TiptapEditor
+                                            content={data.about_us}
+                                            onChange={(html) =>
+                                                setData('about_us', html)
+                                            }
+                                        />
+                                    </div>
+                                    {errors.about_us && (
+                                        <p className="text-sm text-red-500">
+                                            {errors.about_us}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Disclaimer */}
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Disclaimer
+                                    </label>
+                                    <div className="rounded-md border border-input">
+                                        <TiptapEditor
+                                            content={data.disclaimer}
+                                            onChange={(html) =>
+                                                setData('disclaimer', html)
+                                            }
+                                        />
+                                    </div>
+                                    {errors.disclaimer && (
+                                        <p className="text-sm text-red-500">
+                                            {errors.disclaimer}
+                                        </p>
+                                    )}
+                                </div>
+
+                                {/* Partnership */}
+                                <div className="space-y-2">
+                                    <label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Kerjasama
+                                    </label>
+                                    <div className="rounded-md border border-input">
+                                        <TiptapEditor
+                                            content={data.partnership}
+                                            onChange={(html) =>
+                                                setData('partnership', html)
+                                            }
+                                        />
+                                    </div>
+                                    {errors.partnership && (
+                                        <p className="text-sm text-red-500">
+                                            {errors.partnership}
                                         </p>
                                     )}
                                 </div>
