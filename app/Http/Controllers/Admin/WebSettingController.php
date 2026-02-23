@@ -27,7 +27,7 @@ class WebSettingController extends Controller
             'site_tagline' => 'nullable|string|max:150',
             'footer_text' => 'nullable|string|max:500',
             'site_logo' => 'nullable|image|mimes:svg,png,jpg,jpeg|max:2048',
-            'favicon' => 'nullable|image|mimes:ico,png|max:1024',
+            'favicon' => 'nullable|file|mimes:ico,png,svg,webp|max:1024',
             'social_facebook' => 'nullable|url|max:255',
             'social_instagram' => 'nullable|url|max:255',
             'social_twitter' => 'nullable|url|max:255',

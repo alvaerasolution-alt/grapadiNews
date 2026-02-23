@@ -88,7 +88,7 @@ class Setting extends Model
                 'site_logo' => $logo ? asset('storage/'.$logo) : null,
                 'site_tagline' => $settings['site_tagline'] ?? self::DEFAULT_SITE_TAGLINE,
                 'footer_text' => $settings['footer_text'] ?? self::DEFAULT_FOOTER_TEXT,
-                'favicon' => $favicon ? asset('storage/'.$favicon) : null,
+                'favicon' => $favicon ? asset('storage/'.$favicon).'?v='.time() : null,
                 'social_facebook' => $settings['social_facebook'] ?? null,
                 'social_instagram' => $settings['social_instagram'] ?? null,
                 'social_twitter' => $settings['social_twitter'] ?? null,

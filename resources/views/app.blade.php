@@ -19,8 +19,8 @@
         <title inertia>{{ config('app.name', 'GrapadiNews') }}</title>
 
         @if(isset($webSettings['favicon']) && $webSettings['favicon'])
-            <link rel="icon" href="{{ Storage::url($webSettings['favicon']) }}" type="image/png">
-            <link rel="apple-touch-icon" href="{{ Storage::url($webSettings['favicon']) }}">
+            <link rel="icon" href="{{ $webSettings['favicon'] }}" type="image/png">
+            <link rel="apple-touch-icon" href="{{ $webSettings['favicon'] }}">
         @else
             <link rel="icon" href="/favicon.ico" sizes="any">
             <link rel="icon" href="/favicon.svg" type="image/svg+xml">
