@@ -187,11 +187,21 @@ export default function PublicFooter() {
 
             {/* Bottom bar */}
             <div className="border-t border-gray-800">
-                <div className="mx-auto flex max-w-7xl items-center justify-center px-4 py-4">
-                    <p className="text-xs text-gray-500">
+                <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 px-4 py-4 sm:flex-row">
+                    <p className="text-xs text-gray-500 text-center sm:text-left">
                         &copy; {new Date().getFullYear()} {siteName}. All rights
                         reserved.
                     </p>
+                    <div className="w-32">
+                        <a href="https://id.seedbacklink.com/" target="_blank" rel="noopener noreferrer">
+                            <img
+                                title="Seedbacklink"
+                                src="https://id.seedbacklink.com/wp-content/uploads/2023/11/Badge-Seedbacklink_Artboard-1-webp-version.webp"
+                                alt="Seedbacklink"
+                                className="w-full h-auto"
+                            />
+                        </a>
+                    </div>
                 </div>
             </div>
         </footer>

@@ -1,2 +1,4 @@
 User-agent: *
 Disallow:
+
+Sitemap: https://grapadinews.co.id/sitemap.xml

@@ -70,6 +70,7 @@ class HandleInertiaRequests extends Middleware
             ],
             'webSettings' => Setting::getWebSettings(),
             'navCategories' => cache()->remember('nav_categories', 3600, fn () => Category::orderBy('name')->get(['id', 'name', 'slug'])),
+            'vapidPublicKey' => config('services.vapid.public_key', ''),
         ];
     }
 }

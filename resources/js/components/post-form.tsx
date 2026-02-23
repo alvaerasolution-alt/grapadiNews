@@ -38,6 +38,7 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
         title: string;
         slug: string;
         category_id: string;
+        tags: number[];
         excerpt: string;
         body: string;
         status: 'draft' | 'pending' | 'published' | 'rejected';
@@ -49,6 +50,7 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
         title: post?.title || '',
         slug: post?.slug || '',
         category_id: post?.category_id?.toString() || '',
+        tags: post?.tags?.map((t) => t.id) || [],
         excerpt: post?.excerpt || '',
         body: post?.body || '',
         status: (post?.status || 'draft') as
@@ -313,6 +315,45 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
                             {errors.category_id && (
                                 <p className="text-sm text-destructive">
                                     {errors.category_id}
+                                </p>
+                            )}
+                        </div>
+
+                        <div className="space-y-2">
+                            <Label>Tags</Label>
+                            <div className="flex flex-wrap gap-2 rounded-md border border-input bg-background p-3">
+                                {tags.length > 0 ? (
+                                    tags.map((tag) => {
+                                        const isSelected = data.tags.includes(tag.id);
+                                        return (
+                                            <button
+                                                key={tag.id}
+                                                type="button"
+                                                onClick={() => {
+                                                    setData(
+                                                        'tags',
+                                                        isSelected
+                                                            ? data.tags.filter((id) => id !== tag.id)
+                                                            : [...data.tags, tag.id],
+                                                    );
+                                                }}
+                                                className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${isSelected
+                                                        ? 'bg-amber-600 text-white shadow-sm'
+                                                        : 'bg-muted text-muted-foreground hover:bg-amber-100 hover:text-amber-700'
+                                                    }`}
+                                            >
+                                                {isSelected ? '✓ ' : '# '}
+                                                {tag.name}
+                                            </button>
+                                        );
+                                    })
+                                ) : (
+                                    <span className="text-sm text-muted-foreground">Belum ada tag tersedia</span>
+                                )}
+                            </div>
+                            {data.tags.length > 0 && (
+                                <p className="text-xs text-muted-foreground">
+                                    {data.tags.length} tag dipilih
                                 </p>
                             )}
                         </div>

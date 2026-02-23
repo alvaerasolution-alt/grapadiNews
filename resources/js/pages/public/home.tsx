@@ -183,6 +183,8 @@ export default function Home({
                                 banners={homeLeftBanners}
                                 layout="vertical"
                                 mgidWidgetKey="home_left_skin"
+                                linkClassName="h-[calc(100vh-8rem)]"
+                                imageClassName="h-full w-full object-cover"
                             />
                         </div>
                     </aside>
@@ -191,9 +193,9 @@ export default function Home({
                 {/* Main Content Wrapper */}
                 <div
                     className={`min-w-0 flex-1 transition-all duration-300 ${(homeLeftBanners?.length || 0) > 0 ||
-                            (homeRightBanners?.length || 0) > 0
-                            ? 'max-w-5xl'
-                            : 'max-w-7xl'
+                        (homeRightBanners?.length || 0) > 0
+                        ? 'max-w-5xl'
+                        : 'max-w-7xl'
                         }`}
                 >
                     {/* Banner: Below Navbar */}
@@ -430,41 +432,35 @@ export default function Home({
                                         {cat.posts[0] && (
                                             <Link
                                                 href={`/${cat.posts[0].slug}`}
-                                                className="group relative overflow-hidden rounded-xl"
+                                                className="group relative flex flex-col justify-end overflow-hidden rounded-xl bg-gray-900 min-h-[320px] sm:min-h-[400px] lg:h-full"
                                             >
-                                                <div className="aspect-[16/10]">
+                                                <div className="absolute inset-0">
                                                     {cat.posts[0].featured_image ? (
                                                         <img
-                                                            src={
-                                                                cat.posts[0]
-                                                                    .featured_image
-                                                            }
+                                                            src={cat.posts[0].featured_image}
                                                             alt={cat.posts[0].title}
                                                             loading="lazy"
                                                             decoding="async"
-                                                            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                                                         />
                                                     ) : (
                                                         <div className="h-full w-full bg-gray-800" />
                                                     )}
                                                 </div>
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                                                <div className="absolute bottom-0 flex flex-col gap-2 p-5">
+                                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent pointer-events-none" />
+                                                <div className="relative z-10 flex flex-col gap-2 p-5 mt-auto w-full">
                                                     <CategoryBadge
                                                         name={cat.name}
                                                         slug={cat.slug}
-                                                        className="text-[10px]"
+                                                        className="w-fit text-[10px]"
                                                     />
-                                                    <h3 className="line-clamp-2 text-lg font-bold text-white group-hover:text-amber-300">
+                                                    <h3 className="line-clamp-3 text-xl font-bold text-white group-hover:text-amber-300 sm:text-2xl">
                                                         {cat.posts[0].title}
                                                     </h3>
-                                                    <p className="text-xs text-white/70">
+                                                    <p className="text-xs text-white/80 sm:text-sm">
                                                         {cat.posts[0].author.name}{' '}
                                                         &middot;{' '}
-                                                        {
-                                                            cat.posts[0]
-                                                                .published_at_human
-                                                        }
+                                                        {cat.posts[0].published_at_human}
                                                     </p>
                                                 </div>
                                             </Link>
@@ -499,6 +495,8 @@ export default function Home({
                                 banners={homeRightBanners}
                                 layout="vertical"
                                 mgidWidgetKey="home_right_skin"
+                                linkClassName="h-[calc(100vh-8rem)]"
+                                imageClassName="h-full w-full object-cover"
                             />
                         </div>
                     </aside>

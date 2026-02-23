@@ -11,14 +11,22 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\WebSettingController;
 use App\Http\Controllers\BannerClickController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LikeController;
 use App\Http\Controllers\MediaController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\PublicCategoryController;
 use App\Http\Controllers\PublicPostController;
+use App\Http\Controllers\PublicTagController;
+use App\Http\Controllers\PushSubscriptionController;
 use App\Http\Controllers\RedemptionController;
 use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SitemapController;
 use Illuminate\Support\Facades\Route;
+
+// XML Sitemap
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
 // Banner click tracking
 Route::post('/banners/{banner}/click', BannerClickController::class)->name('banners.click');
@@ -26,7 +34,12 @@ Route::post('/banners/{banner}/click', BannerClickController::class)->name('bann
 // Public pages
 Route::get('/', [PublicPostController::class, 'index'])->name('home');
 Route::get('/category/{category:slug}', [PublicCategoryController::class, 'show'])->name('category.show');
+Route::get('/tag/{tag:slug}', [PublicTagController::class, 'show'])->name('tag.show');
 Route::get('/search', [SearchController::class, 'search'])->name('search');
+
+// Push notification subscriptions (no auth required)
+Route::post('/push/subscribe', [PushSubscriptionController::class, 'store'])->name('push.subscribe');
+Route::post('/push/unsubscribe', [PushSubscriptionController::class, 'destroy'])->name('push.unsubscribe');
 
 // Static pages
 Route::get('/tentang-kami', fn () => \Inertia\Inertia::render('public/about'))->name('about');
@@ -36,6 +49,12 @@ Route::get('/kerjasama', fn () => \Inertia\Inertia::render('public/partnership')
 // Legacy redirect: /article/{slug} -> /{slug} (301 for SEO)
 Route::get('/article/{slug}', fn (string $slug) => redirect("/{$slug}", 301));
 
+// Like toggle (no auth — session-based)
+Route::post('posts/{post:slug}/like', [LikeController::class, 'toggle'])->name('posts.like');
+
+// Comments (guests can post with name/email)
+Route::post('posts/{post:slug}/comments', [CommentController::class, 'store'])->name('posts.comments.store');
+
 // Contributor dashboard
 Route::get('dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
@@ -44,6 +63,9 @@ Route::get('dashboard', [DashboardController::class, 'index'])
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('media/upload', [MediaController::class, 'store'])->name('media.upload');
     Route::resource('posts', PostController::class);
+
+    // Comment deletion (authenticated users only)
+    Route::delete('comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 
     // Redemption routes
     Route::get('redemptions', [RedemptionController::class, 'index'])->name('redemptions.index');
@@ -70,6 +92,9 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::get('users/create', [StoreUserController::class, 'create'])->name('users.create');
         Route::post('users', [StoreUserController::class, 'store'])->name('users.store');
         Route::get('users/{user}', [UserController::class, 'show'])->name('users.show');
+        Route::get('users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
+        Route::put('users/{user}', [UserController::class, 'update'])->name('users.update');
+        Route::delete('users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
         Route::patch('users/{user}/role', [UserController::class, 'updateRole'])->name('users.update-role');
 
         // Settings - Web & Ads (new)
@@ -77,7 +102,6 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::post('settings/web', [WebSettingController::class, 'update'])->name('settings.web.update');
         Route::delete('settings/web/logo/delete', [WebSettingController::class, 'destroyLogo'])->name('settings.web.logo.delete');
         Route::delete('settings/web/favicon/delete', [WebSettingController::class, 'destroyFavicon'])->name('settings.web.favicon.delete');
-
 
         // Settings - Legacy (deprecated, redirect to new)
         Route::get('settings', function () {

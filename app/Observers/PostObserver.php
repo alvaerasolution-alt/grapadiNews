@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Enums\PointType;
 use App\Enums\PostStatus;
+use App\Jobs\SendNewPostNotification;
 use App\Models\Post;
 use App\Services\PointService;
 use App\Services\UnsplashService;
@@ -30,11 +31,14 @@ class PostObserver
      */
     public function updated(Post $post): void
     {
-        // Award publish points if status changed to Published
+        // Award publish points and send push notifications if status changed to Published
         if ($post->isDirty('status') && $post->status === PostStatus::Published) {
             if ($post->points_awarded_on_publish === 0) {
                 $this->awardPublishPoints($post);
             }
+
+            // Send push notification for new published post
+            SendNewPostNotification::dispatch($post->id);
         }
 
         // Fetch Unsplash image if featured image was cleared

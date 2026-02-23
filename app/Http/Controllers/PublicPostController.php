@@ -150,6 +150,24 @@ class PublicPostController extends Controller
             ->get()
             ->map(fn (Post $p) => $this->formatPostCard($p));
 
+        $user = $request->user();
+
+        $comments = $post->comments()
+            ->with('user:id,name')
+            ->latest()
+            ->get()
+            ->map(fn ($comment) => [
+                'id' => $comment->id,
+                'body' => $comment->body,
+                'created_at_human' => $comment->created_at->diffForHumans(),
+                'user' => $comment->user ? [
+                    'id' => $comment->user->id,
+                    'name' => $comment->user->name,
+                ] : null,
+                'guest_name' => $comment->guest_name,
+                'commenter_name' => $comment->commenter_name,
+            ]);
+
         return Inertia::render('public/post-show', [
             'post' => [
                 'id' => $post->id,
@@ -162,6 +180,9 @@ class PublicPostController extends Controller
                 'meta_description' => $post->meta_description ?: $post->excerpt,
                 'og_image' => ($post->og_image ?: $this->resolvePostImage($post)),
                 'view_count' => $post->view_count,
+                'likes_count' => $post->likes()->count(),
+                'is_liked' => in_array($post->id, $request->session()->get('liked_posts', [])),
+                'comments_count' => $post->comments()->count(),
                 'published_at' => $post->published_at?->toISOString(),
                 'published_at_human' => $post->published_at?->diffForHumans(),
                 'published_at_formatted' => $post->published_at?->format('d M Y, H:i'),
@@ -177,6 +198,7 @@ class PublicPostController extends Controller
                     'slug' => $tag->slug,
                 ]),
             ],
+            'comments' => $comments,
             'relatedPosts' => $relatedPosts,
             'trendingPosts' => $trendingPosts,
             'popularPosts' => $popularPosts,
@@ -214,6 +236,7 @@ class PublicPostController extends Controller
             if (str_starts_with($post->featured_image, 'http')) {
                 return $post->featured_image;
             }
+
             return Storage::disk('public')->url($post->featured_image);
         }
 

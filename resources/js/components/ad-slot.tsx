@@ -72,13 +72,13 @@ export default function AdSlot({
                                 <Wrapper
                                     key={banner.id}
                                     {...wrapperProps}
-                                    className="group block overflow-hidden rounded-xl border border-gray-800 transition-shadow hover:shadow-md"
+                                    className={`group block overflow-hidden rounded-xl border border-gray-800 transition-shadow hover:shadow-md ${linkClassName}`}
                                     aria-label={`Ad: ${banner.title}`}
                                 >
                                     <img
                                         src={`/storage/${banner.image}`}
                                         alt={banner.title}
-                                        className="h-auto w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
+                                        className={`h-auto w-full object-cover transition-transform duration-300 group-hover:scale-[1.02] ${imageClassName}`}
                                         loading="lazy"
                                     />
                                 </Wrapper>

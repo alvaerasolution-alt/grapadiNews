@@ -12,7 +12,7 @@ import {
     SelectTrigger,
     SelectValue,
 } from '@/components/ui/select';
-import { Search, Award, Plus } from 'lucide-react';
+import { Search, Award, Plus, Edit, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import type { BreadcrumbItem, PaginatedResponse } from '@/types';
 
@@ -149,6 +149,7 @@ export default function AdminUsersIndex({
                                         <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground md:table-cell">Posts</th>
                                         <th className="h-12 px-4 text-left align-middle font-medium text-muted-foreground">Points</th>
                                         <th className="hidden h-12 px-4 text-left align-middle font-medium text-muted-foreground lg:table-cell">Joined</th>
+                                        <th className="h-12 px-4 text-right align-middle font-medium text-muted-foreground">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody className="[&_tr:last-child]:border-0">
@@ -177,12 +178,35 @@ export default function AdminUsersIndex({
                                                 <td className="hidden p-4 align-middle text-muted-foreground lg:table-cell">
                                                     {new Date(user.created_at).toLocaleDateString()}
                                                 </td>
+                                                <td className="p-4 align-middle text-right">
+                                                    <div className="flex items-center justify-end gap-2">
+                                                        <Link href={`/admin/users/${user.id}/edit`}>
+                                                            <Button variant="outline" size="icon" className="h-8 w-8">
+                                                                <Edit className="h-4 w-4 text-muted-foreground" />
+                                                                <span className="sr-only">Edit</span>
+                                                            </Button>
+                                                        </Link>
+                                                        <Button
+                                                            variant="outline"
+                                                            size="icon"
+                                                            className="h-8 w-8 text-red-500 hover:bg-red-50 hover:text-red-600 dark:hover:bg-red-950"
+                                                            onClick={() => {
+                                                                if (window.confirm('Are you sure you want to delete this user?')) {
+                                                                    router.delete(`/admin/users/${user.id}`);
+                                                                }
+                                                            }}
+                                                        >
+                                                            <Trash2 className="h-4 w-4" />
+                                                            <span className="sr-only">Delete</span>
+                                                        </Button>
+                                                    </div>
+                                                </td>
                                             </tr>
                                         ))
                                     ) : (
                                         <tr>
                                             <td
-                                                colSpan={6}
+                                                colSpan={7}
                                                 className="p-4 text-center text-muted-foreground"
                                             >
                                                 No users found.
@@ -203,10 +227,10 @@ export default function AdminUsersIndex({
                                         preserveState
                                         preserveScroll
                                         className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${link.active
-                                                ? 'bg-amber-600 text-white'
-                                                : link.url
-                                                    ? 'hover:bg-muted'
-                                                    : 'pointer-events-none text-muted-foreground'
+                                            ? 'bg-amber-600 text-white'
+                                            : link.url
+                                                ? 'hover:bg-muted'
+                                                : 'pointer-events-none text-muted-foreground'
                                             }`}
                                         dangerouslySetInnerHTML={{
                                             __html: link.label,

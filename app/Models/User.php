@@ -77,4 +77,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(RedemptionRequest::class);
     }
+
+    /**
+     * @return HasMany<Comment, $this>
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

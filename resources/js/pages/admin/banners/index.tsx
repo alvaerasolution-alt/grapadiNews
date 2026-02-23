@@ -7,7 +7,7 @@ interface Banner {
     id: number;
     title: string;
     image: string;
-    url: string;
+    url: string | null;
     position: string;
     is_active: boolean;
     sort_order: number;
@@ -118,17 +118,21 @@ export default function AdminBannersIndex({
                                             <div className="font-medium">
                                                 {banner.title}
                                             </div>
-                                            <a
-                                                href={banner.url}
-                                                target="_blank"
-                                                rel="noopener noreferrer"
-                                                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-amber-700"
-                                            >
-                                                <ExternalLink className="h-3 w-3" />
-                                                {banner.url.length > 35
-                                                    ? `${banner.url.substring(0, 35)}...`
-                                                    : banner.url}
-                                            </a>
+                                            {banner.url ? (
+                                                <a
+                                                    href={banner.url}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-amber-700"
+                                                >
+                                                    <ExternalLink className="h-3 w-3" />
+                                                    {banner.url.length > 35
+                                                        ? `${banner.url.substring(0, 35)}...`
+                                                        : banner.url}
+                                                </a>
+                                            ) : (
+                                                <span className="text-xs text-muted-foreground">—</span>
+                                            )}
                                         </td>
                                         <td className="p-4 align-middle">
                                             <span className="inline-flex rounded-full bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700">
