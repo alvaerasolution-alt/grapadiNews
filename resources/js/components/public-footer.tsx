@@ -102,6 +102,16 @@ export default function PublicFooter() {
                         <p className="mt-3 text-sm leading-relaxed text-gray-400">
                             {footerText}
                         </p>
+                        <div className="mt-4 w-28">
+                            <a href="https://id.seedbacklink.com/" target="_blank" rel="noopener noreferrer">
+                                <img
+                                    title="Seedbacklink"
+                                    src="https://id.seedbacklink.com/wp-content/uploads/2023/11/Badge-Seedbacklink_Artboard-1-webp-version.webp"
+                                    alt="Seedbacklink"
+                                    className="w-full h-auto"
+                                />
+                            </a>
+                        </div>
                     </div>
 
                     {/* Information */}
@@ -192,16 +202,7 @@ export default function PublicFooter() {
                         &copy; {new Date().getFullYear()} {siteName}. All rights
                         reserved.
                     </p>
-                    <div className="w-32">
-                        <a href="https://id.seedbacklink.com/" target="_blank" rel="noopener noreferrer">
-                            <img
-                                title="Seedbacklink"
-                                src="https://id.seedbacklink.com/wp-content/uploads/2023/11/Badge-Seedbacklink_Artboard-1-webp-version.webp"
-                                alt="Seedbacklink"
-                                className="w-full h-auto"
-                            />
-                        </a>
-                    </div>
+
                 </div>
             </div>
         </footer>
