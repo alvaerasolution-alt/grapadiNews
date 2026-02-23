@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('likes', function (Blueprint $table) {
-            $table->dropUnique(['user_id', 'post_id']);
             $table->dropForeign(['user_id']);
+            $table->dropUnique(['user_id', 'post_id']);
             $table->dropColumn('user_id');
             $table->string('session_id', 100)->after('id');
             $table->unique(['session_id', 'post_id']);
