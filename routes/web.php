@@ -82,6 +82,8 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
         Route::get('posts', [AdminPostController::class, 'index'])->name('posts.index');
         Route::get('posts/{post:slug}', [AdminPostController::class, 'show'])->name('posts.show');
+        Route::get('posts/{post:slug}/edit', [PostController::class, 'edit'])->name('posts.edit');
+        Route::put('posts/{post:slug}', [PostController::class, 'update'])->name('posts.update');
         Route::patch('posts/{post:slug}/status', [AdminPostController::class, 'updateStatus'])->name('posts.update-status');
         Route::delete('posts/{post:slug}', [AdminPostController::class, 'destroy'])->name('posts.destroy');
 

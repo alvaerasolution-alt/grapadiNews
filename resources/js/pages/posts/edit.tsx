@@ -8,23 +8,23 @@ interface EditPostProps {
     post: Post;
     categories: Category[];
     tags: Tag[];
+    actionUrl: string;
+    isAdmin?: boolean;
 }
 
-export default function EditPost({ post, categories, tags }: EditPostProps) {
-    const breadcrumbs: BreadcrumbItem[] = [
-        {
-            title: 'Dashboard',
-            href: dashboard().url,
-        },
-        {
-            title: 'My Articles',
-            href: '/posts',
-        },
-        {
-            title: 'Edit Article',
-            href: `/posts/${post.slug}/edit`,
-        },
-    ];
+export default function EditPost({ post, categories, tags, actionUrl, isAdmin }: EditPostProps) {
+    const breadcrumbs: BreadcrumbItem[] = isAdmin
+        ? [
+            { title: 'Admin Dashboard', href: '/admin' },
+            { title: 'Posts', href: '/admin/posts' },
+            { title: post.title, href: `/admin/posts/${post.slug}` },
+            { title: 'Edit', href: `/admin/posts/${post.slug}/edit` },
+        ]
+        : [
+            { title: 'Dashboard', href: dashboard().url },
+            { title: 'My Articles', href: '/posts' },
+            { title: 'Edit Article', href: `/posts/${post.slug}/edit` },
+        ];
 
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
@@ -39,8 +39,9 @@ export default function EditPost({ post, categories, tags }: EditPostProps) {
                     </p>
                 </div>
 
-                <PostForm post={post} categories={categories} tags={tags} />
+                <PostForm post={post} categories={categories} tags={tags} actionUrl={actionUrl} isAdmin={isAdmin} />
             </div>
         </AppLayout>
     );
 }
+

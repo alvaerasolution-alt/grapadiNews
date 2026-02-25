@@ -79,14 +79,20 @@ class PostController extends Controller
      */
     public function edit(Post $post): Response
     {
-        abort_if($post->user_id !== auth()->id(), 403);
+        abort_if($post->user_id !== auth()->id() && ! auth()->user()->hasRole('admin'), 403);
 
         $post->load('tags');
+
+        $isAdmin = auth()->user()->hasRole('admin');
 
         return Inertia::render('posts/edit', [
             'post' => $post,
             'categories' => Category::select('id', 'name')->orderBy('name')->get(),
             'tags' => Tag::select('id', 'name')->orderBy('name')->get(),
+            'actionUrl' => $isAdmin
+                ? "/admin/posts/{$post->slug}"
+                : "/posts/{$post->slug}",
+            'isAdmin' => $isAdmin,
         ]);
     }
 
@@ -95,7 +101,7 @@ class PostController extends Controller
      */
     public function update(PostRequest $request, Post $post)
     {
-        abort_if($post->user_id !== auth()->id(), 403);
+        abort_if($post->user_id !== auth()->id() && ! auth()->user()->hasRole('admin'), 403);
 
         $data = $request->validated();
 
@@ -119,7 +125,11 @@ class PostController extends Controller
             $post->tags()->sync($data['tags']);
         }
 
-        return redirect()->route('posts.index')
+        $redirectRoute = auth()->user()->hasRole('admin')
+            ? route('admin.posts.show', $post->slug)
+            : route('posts.index');
+
+        return redirect($redirectRoute)
             ->with('success', 'Post updated successfully.');
     }
 
@@ -128,7 +138,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        abort_if($post->user_id !== auth()->id(), 403);
+        abort_if($post->user_id !== auth()->id() && ! auth()->user()->hasRole('admin'), 403);
 
         ImageHelper::delete($post->featured_image);
 

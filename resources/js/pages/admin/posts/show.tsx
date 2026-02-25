@@ -24,6 +24,7 @@ import StatusBadge from '@/components/status-badge';
 import CategoryBadge from '@/components/category-badge';
 import {
     Eye,
+    Pencil,
     Trash2,
     CheckCircle,
     XCircle,
@@ -32,6 +33,7 @@ import {
     Calendar,
     User,
 } from 'lucide-react';
+
 import { useState } from 'react';
 import type { BreadcrumbItem, Category, Tag } from '@/types';
 
@@ -122,6 +124,12 @@ export default function AdminPostShow({ post }: AdminPostShowProps) {
                         </div>
                     </div>
                     <div className="flex items-center gap-2">
+                        <Link href={`/admin/posts/${post.slug}/edit`}>
+                            <Button variant="outline">
+                                <Pencil className="mr-2 h-4 w-4" />
+                                Edit
+                            </Button>
+                        </Link>
                         {post.status !== 'published' && (
                             <Button
                                 className="bg-amber-600 text-white hover:bg-amber-700"

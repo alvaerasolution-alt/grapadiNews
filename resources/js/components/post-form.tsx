@@ -20,9 +20,11 @@ interface PostFormProps {
     post?: Post;
     categories: Category[];
     tags: Tag[];
+    actionUrl?: string;
+    isAdmin?: boolean;
 }
 
-export default function PostForm({ post, categories, tags }: PostFormProps) {
+export default function PostForm({ post, categories, tags, actionUrl, isAdmin }: PostFormProps) {
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [imagePreview, setImagePreview] = useState<string | null>(
         post?.featured_image ? `/storage/${post.featured_image}` : null,
@@ -85,8 +87,9 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
         e.preventDefault();
 
         if (post) {
+            const url = actionUrl ?? `/posts/${post.slug}`;
             setData('_method', 'PUT');
-            submitPost(`/posts/${post.slug}`, {
+            submitPost(url, {
                 forceFormData: true,
                 headers: { 'X-HTTP-Method-Override': 'PUT' },
             });
@@ -281,6 +284,12 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
                                     <SelectItem value="pending">
                                         Submit for Review
                                     </SelectItem>
+                                    {isAdmin && (
+                                        <>
+                                            <SelectItem value="published">Published</SelectItem>
+                                            <SelectItem value="rejected">Rejected</SelectItem>
+                                        </>
+                                    )}
                                 </SelectContent>
                             </Select>
                             {errors.status && (
@@ -338,8 +347,8 @@ export default function PostForm({ post, categories, tags }: PostFormProps) {
                                                     );
                                                 }}
                                                 className={`rounded-full px-3 py-1 text-xs font-medium transition-all ${isSelected
-                                                        ? 'bg-amber-600 text-white shadow-sm'
-                                                        : 'bg-muted text-muted-foreground hover:bg-amber-100 hover:text-amber-700'
+                                                    ? 'bg-amber-600 text-white shadow-sm'
+                                                    : 'bg-muted text-muted-foreground hover:bg-amber-100 hover:text-amber-700'
                                                     }`}
                                             >
                                                 {isSelected ? '✓ ' : '# '}

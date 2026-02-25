@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/select';
 import StatusBadge from '@/components/status-badge';
 import CategoryBadge from '@/components/category-badge';
-import { Eye, Trash2, Search } from 'lucide-react';
+import { Eye, Pencil, Trash2, Search } from 'lucide-react';
 import { useState } from 'react';
 import type { BreadcrumbItem, Category, PaginatedResponse } from '@/types';
 
@@ -241,6 +241,20 @@ export default function AdminPostsIndex({
                                                                 </span>
                                                             </Button>
                                                         </Link>
+                                                        <Link
+                                                            href={`/admin/posts/${post.slug}/edit`}
+                                                        >
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-8 w-8"
+                                                            >
+                                                                <Pencil className="h-4 w-4" />
+                                                                <span className="sr-only">
+                                                                    Edit
+                                                                </span>
+                                                            </Button>
+                                                        </Link>
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
@@ -284,10 +298,10 @@ export default function AdminPostsIndex({
                                         preserveState
                                         preserveScroll
                                         className={`inline-flex h-9 min-w-9 items-center justify-center rounded-md px-3 text-sm ${link.active
-                                                ? 'bg-amber-600 text-white'
-                                                : link.url
-                                                    ? 'hover:bg-muted'
-                                                    : 'pointer-events-none text-muted-foreground'
+                                            ? 'bg-amber-600 text-white'
+                                            : link.url
+                                                ? 'hover:bg-muted'
+                                                : 'pointer-events-none text-muted-foreground'
                                             }`}
                                         dangerouslySetInnerHTML={{
                                             __html: link.label,
