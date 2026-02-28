@@ -10,6 +10,13 @@ import AdSlot, { type BannerItem } from '@/components/ad-slot';
 import AdPopup from '@/components/ad-popup';
 import CurrencyWidget from '@/components/currency-widget';
 
+// New layout components
+
+import MarketOverview from '@/components/market-overview';
+import MarketDashboard from '@/components/market-dashboard';
+import HorizontalArticleList from '@/components/horizontal-article-list';
+import FeaturedArticleGrid from '@/components/featured-article-grid';
+
 interface PostCard {
     id: number;
     title: string;
@@ -51,6 +58,8 @@ interface Props {
     trendingPosts: TrendingPost[];
     categories: CategoryWithCount[];
     categoryPosts: CategorySection[];
+    marketPosts: PostCard[];
+    popularMarketPosts: PostCard[];
     belowNavbarBanners: BannerItem[];
     heroBelowBanners: BannerItem[];
     sidebarBanners: BannerItem[];
@@ -147,6 +156,8 @@ export default function Home({
     homeLeftBanners,
     homeRightBanners,
     popupBanners,
+    marketPosts,
+    popularMarketPosts,
 }: Props) {
     const { name } = usePage().props;
     const hero = featuredPosts[0];
@@ -160,9 +171,20 @@ export default function Home({
         description: 'Berita terkini dan terpercaya dari GrapadiNews',
     });
 
-    // Split articles for inline ad insertion
-    const firstBatch = latestPosts.data.slice(0, 3);
-    const restBatch = latestPosts.data.slice(3);
+    // Split articles for the dashboard layout
+    // We already have hero (1) and sideFeatures (4) from featuredPosts.
+    // We will use latestPosts for the new widget sections and the standard feed.
+    const marketDashboardSide = popularMarketPosts;
+    const marketDashboardBottom = featuredPosts.slice(3, 5);
+
+    // Grab some articles for the replacement widgets
+    const horizontalArticles = latestPosts.data.slice(0, 3);
+    const featuredArticles = latestPosts.data.slice(3, 5);
+    const marketDashboardLeft = marketPosts;
+
+    // The rest of the articles go to the standard feed
+    const firstBatch = latestPosts.data.slice(5, 8);
+    const restBatch = latestPosts.data.slice(8);
 
     return (
         <PublicLayout>
@@ -198,6 +220,8 @@ export default function Home({
                         : 'max-w-7xl'
                         }`}
                 >
+
+
                     {/* Banner: Below Navbar */}
                     {belowNavbarBanners && belowNavbarBanners.length > 0 && (
                         <section className="w-full px-4 pt-4">
@@ -210,75 +234,99 @@ export default function Home({
                         </section>
                     )}
 
-                    {/* Hero Featured Section */}
+                    {/* Hero & Market Overview Section */}
                     {hero && (
-                        <section className="w-full px-4 pt-6">
-                            <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-                                {/* Main hero card */}
-                                <Link
-                                    href={`/${hero.slug}`}
-                                    className="group relative overflow-hidden rounded-xl lg:col-span-3 aspect-[4/3] lg:aspect-auto lg:h-full"
-                                >
-                                    <LazyImage
-                                        src={hero.featured_image}
-                                        alt={hero.title}
-                                        priority
-                                        fetchPriority="high"
-                                        naturalSize
-                                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
-                                    />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
-                                    <div className="absolute bottom-0 flex flex-col gap-3 p-6">
-                                        {hero.category && (
-                                            <CategoryBadge
-                                                name={hero.category.name}
-                                                slug={hero.category.slug}
-                                            />
-                                        )}
-                                        <h2 className="text-2xl font-extrabold text-white lg:text-3xl">
-                                            {hero.title}
-                                        </h2>
-                                        <p className="text-sm text-white/80">
-                                            {hero.author.name} &middot;{' '}
-                                            {hero.published_at_human}
-                                        </p>
-                                    </div>
-                                </Link>
-
-                                {/* 2x2 smaller featured cards */}
-                                <div className="grid grid-cols-2 gap-4 lg:col-span-2">
-                                    {sideFeatures.map((post) => (
-                                        <Link
-                                            key={post.id}
-                                            href={`/${post.slug}`}
-                                            className="group relative overflow-hidden rounded-xl"
-                                        >
-                                            <div className="aspect-[4/3]">
-                                                <LazyImage
-                                                    src={post.featured_image}
-                                                    alt={post.title}
-                                                    className="transition-transform duration-300 group-hover:scale-105"
+                        <section className="w-full px-4 pt-4">
+                            <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
+                                {/* Main hero card (Left) */}
+                                <div className="lg:col-span-7 rounded-xl border border-gray-800 bg-[#1A1A1A] overflow-hidden flex flex-col group">
+                                    <Link
+                                        href={`/${hero.slug}`}
+                                        className="relative aspect-video xl:aspect-[16/10] w-full shrink-0 overflow-hidden bg-gray-800"
+                                    >
+                                        <LazyImage
+                                            src={hero.featured_image}
+                                            alt={hero.title}
+                                            priority
+                                            fetchPriority="high"
+                                            naturalSize
+                                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                        />
+                                        <div className="absolute inset-0 bg-gradient-to-t from-gray-950/80 via-transparent to-transparent pointer-events-none" />
+                                        <div className="absolute top-4 left-4">
+                                            {hero.category && (
+                                                <CategoryBadge
+                                                    name={hero.category.name}
+                                                    slug={hero.category.slug}
                                                 />
-                                            </div>
-                                            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                                            <div className="absolute bottom-0 flex flex-col gap-1.5 p-3">
-                                                {post.category && (
-                                                    <CategoryBadge
-                                                        name={post.category.name}
-                                                        slug={post.category.slug}
-                                                        className="text-[8px]"
-                                                    />
-                                                )}
-                                                <h3 className="line-clamp-2 text-sm font-bold text-white">
-                                                    {post.title}
-                                                </h3>
-                                            </div>
+                                            )}
+                                        </div>
+                                    </Link>
+                                    <div className="flex flex-col gap-3 p-5 flex-1">
+                                        <Link href={`/${hero.slug}`}>
+                                            <h2 className="text-xl font-bold text-gray-100 group-hover:text-amber-400 lg:text-3xl leading-snug">
+                                                {hero.title}
+                                            </h2>
                                         </Link>
-                                    ))}
+                                        <p className="line-clamp-2 text-sm text-gray-400">
+                                            {hero.excerpt}
+                                        </p>
+                                        <div className="mt-auto flex items-center gap-2 text-xs text-gray-500">
+                                            <span>{hero.author.name}</span>
+                                            <span>&middot;</span>
+                                            <span>{hero.published_at_human}</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Market Overview Widget (Right) */}
+                                <div className="lg:col-span-5 h-[400px] lg:h-auto">
+                                    <MarketOverview />
                                 </div>
                             </div>
                         </section>
                     )}
+
+                    {/* Market Dashboard Section */}
+                    <MarketDashboard
+                        sideArticles={marketDashboardSide}
+                        bottomArticles={marketDashboardBottom}
+                        leftArticles={marketDashboardLeft}
+                    />
+
+                    {/* Pilihan Editor */}
+                    <HorizontalArticleList
+                        title="Pilihan Editor"
+                        articles={horizontalArticles}
+                    />
+
+                    {/* Banner: Home Mid (Below Pilihan Editor) */}
+                    {homeMidBanners && homeMidBanners.length > 0 && (
+                        <section className="w-full px-4 pt-6">
+                            <AdSlot
+                                banners={homeMidBanners}
+                                layout="horizontal"
+                                mgidWidgetKey="home_mid"
+                                linkClassName="w-full"
+                                imageClassName="max-h-[200px] w-full object-cover"
+                            />
+                        </section>
+                    )}
+
+                    {/* Artikel Unggulan */}
+                    <FeaturedArticleGrid
+                        title="Artikel Unggulan"
+                        articles={featuredArticles}
+                    />
+
+                    {/* Banner: Below Artikel Unggulan (MGID only or fallback) */}
+                    <section className="w-full px-4 pt-6">
+                        <AdSlot
+                            banners={[]} // Empty array since it's an extra slot just for MGID
+                            layout="horizontal"
+                            mgidWidgetKey="home_mid_2"
+                        />
+                    </section>
 
 
                     {/* Banner: Below Hero */}

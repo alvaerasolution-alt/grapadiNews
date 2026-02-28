@@ -87,12 +87,33 @@ class PublicPostController extends Controller
             ];
         });
 
+        $marketPosts = Post::query()
+            ->published()
+            ->whereHas('category', fn ($q) => $q->where('slug', 'market'))
+            ->with(['user:id,name', 'category:id,name,slug'])
+            ->latest('published_at')
+            ->take(3)
+            ->get()
+            ->map(fn (Post $post) => $this->formatPostCard($post));
+
+        $popularMarketPosts = Post::query()
+            ->published()
+            ->whereHas('category', fn ($q) => $q->where('slug', 'market'))
+            ->with(['user:id,name', 'category:id,name,slug'])
+            ->orderByDesc('view_count')
+            ->latest('published_at')
+            ->take(2)
+            ->get()
+            ->map(fn (Post $post) => $this->formatPostCard($post));
+
         return Inertia::render('public/home', [
             'featuredPosts' => $featuredPosts,
             'latestPosts' => $latestPosts,
             'trendingPosts' => $trendingPosts,
             'categories' => $categories,
             'categoryPosts' => $categoryPosts,
+            'marketPosts' => $marketPosts,
+            'popularMarketPosts' => $popularMarketPosts,
             'belowNavbarBanners' => Banner::forSlot(BannerPosition::HomeBelowNavbar),
             'heroBelowBanners' => Banner::forSlot(BannerPosition::HomeHeroBelow),
             'sidebarBanners' => Banner::forSlot(BannerPosition::HomeSidebar),
