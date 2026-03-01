@@ -42,6 +42,7 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             'name' => config('app.name'),
+            'appUrl' => config('app.url'),
             'auth' => [
                 'user' => $user ? array_merge($user->toArray(), [
                     'roles' => $user->getRoleNames()->toArray(),
@@ -64,6 +65,8 @@ class HandleInertiaRequests extends Middleware
                     'home_sidebar' => env('MGID_WIDGET_HOME_SIDEBAR'),
                     'home_feed_inline' => env('MGID_WIDGET_HOME_FEED_INLINE'),
                     'home_mid_section' => env('MGID_WIDGET_HOME_MID_SECTION'),
+                    'home_mid_2' => env('MGID_WIDGET_HOME_MID_2'),
+                    'home_bottom' => env('MGID_WIDGET_HOME_BOTTOM'),
                     'category_top' => env('MGID_WIDGET_CATEGORY_TOP'),
                     'category_sidebar' => env('MGID_WIDGET_CATEGORY_SIDEBAR'),
                 ],

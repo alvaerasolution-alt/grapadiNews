@@ -80,15 +80,17 @@ class Banner extends Model
      */
     public static function forSlot(BannerPosition $position): \Illuminate\Support\Collection
     {
-        return static::active()
-            ->position($position)
-            ->ordered()
-            ->get()
-            ->map(fn (self $banner) => [
-                'id' => $banner->id,
-                'title' => $banner->title,
-                'image' => $banner->image,
-                'url' => $banner->url,
-            ]);
+        return \Illuminate\Support\Facades\Cache::remember("banners_slot_{$position->value}", 300, function () use ($position) {
+            return static::active()
+                ->position($position)
+                ->ordered()
+                ->get()
+                ->map(fn (self $banner) => [
+                    'id' => $banner->id,
+                    'title' => $banner->title,
+                    'image' => $banner->image,
+                    'url' => $banner->url,
+                ]);
+        });
     }
 }

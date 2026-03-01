@@ -16,7 +16,7 @@ interface PostCard {
     view_count: number;
     published_at: string;
     published_at_human: string;
-    author: { name: string };
+    author: { name: string; profile_photo?: string | null; bio?: string | null };
     category: { name: string; slug: string } | null;
 }
 

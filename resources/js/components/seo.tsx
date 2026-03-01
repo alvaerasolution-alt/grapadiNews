@@ -7,6 +7,7 @@ interface SeoProps {
     ogDescription?: string;
     ogImage?: string;
     ogType?: string;
+    ogUrl?: string;
     twitterCard?: 'summary' | 'summary_large_image';
     canonicalUrl?: string;
     jsonLd?: Record<string, unknown>;
@@ -20,15 +21,23 @@ export default function Seo({
     ogDescription,
     ogImage,
     ogType = 'website',
+    ogUrl,
     twitterCard = 'summary_large_image',
     canonicalUrl,
     jsonLd,
     noIndex = false,
 }: SeoProps) {
-    const { name } = usePage().props;
+    const { name, appUrl } = usePage().props as { name: string; appUrl?: string };
     const siteTitle = title ? `${title} | ${name}` : String(name);
     const resolvedOgTitle = ogTitle ?? title ?? String(name);
     const resolvedOgDescription = ogDescription ?? description;
+
+    // Ensure og:image is always an absolute URL (required by WhatsApp/social media)
+    const baseUrl = appUrl || (typeof window !== 'undefined' ? window.location.origin : '');
+    const resolvedOgImage = ogImage
+        ? ogImage.startsWith('http') ? ogImage : `${baseUrl}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`
+        : undefined;
+    const resolvedOgUrl = ogUrl || (typeof window !== 'undefined' ? window.location.href : undefined);
 
     return (
         <Head title={title}>
@@ -68,12 +77,31 @@ export default function Seo({
                 />
             )}
             <meta property="og:type" content={ogType} head-key="og:type" />
-            {ogImage && (
+            {resolvedOgUrl && (
                 <meta
-                    property="og:image"
-                    content={ogImage}
-                    head-key="og:image"
+                    property="og:url"
+                    content={resolvedOgUrl}
+                    head-key="og:url"
                 />
+            )}
+            {resolvedOgImage && (
+                <>
+                    <meta
+                        property="og:image"
+                        content={resolvedOgImage}
+                        head-key="og:image"
+                    />
+                    <meta
+                        property="og:image:width"
+                        content="1200"
+                        head-key="og:image:width"
+                    />
+                    <meta
+                        property="og:image:height"
+                        content="630"
+                        head-key="og:image:height"
+                    />
+                </>
             )}
             <meta
                 property="og:site_name"
@@ -99,10 +127,10 @@ export default function Seo({
                     head-key="twitter:description"
                 />
             )}
-            {ogImage && (
+            {resolvedOgImage && (
                 <meta
                     name="twitter:image"
-                    content={ogImage}
+                    content={resolvedOgImage}
                     head-key="twitter:image"
                 />
             )}

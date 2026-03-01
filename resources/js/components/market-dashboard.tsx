@@ -90,7 +90,7 @@ export default function MarketDashboard({ sideArticles, bottomArticles, leftArti
         <section className="w-full px-4 py-6">
             <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-100 flex items-center gap-2">
-                    Market Dashboard
+                    Market Overview
                     <span className="text-amber-500">&rsaquo;</span>
                 </h2>
                 <span className="rounded-full bg-green-500/20 px-2 py-0.5 text-[10px] font-medium text-green-400">
@@ -128,52 +128,59 @@ export default function MarketDashboard({ sideArticles, bottomArticles, leftArti
                             </div>
                         </div>
 
-                        {/* Text-based Stock Table */}
-                        <div className="px-4 py-2">
-                            {/* Table Header */}
-                            <div className="grid grid-cols-4 gap-4 pb-3 border-b border-gray-800/60 text-xs font-medium text-gray-500">
-                                <span>Kode Saham</span>
-                                <span className="text-right">Harga</span>
-                                <span className="text-right">Perubahan</span>
-                                <span className="text-right">Volume</span>
-                            </div>
+                        {/* Text-based Stock Table mb-2 */}
+                        <div className="px-4 py-2 overflow-x-auto">
+                            <div className="min-w-[400px] lg:min-w-0">
+                                {/* Table Header */}
+                                <div className="grid grid-cols-4 gap-4 pb-3 border-b border-gray-800/60 text-xs font-medium text-gray-500">
+                                    <span>Kode Saham</span>
+                                    <span className="text-right">Harga</span>
+                                    <span className="text-right">Perubahan</span>
+                                    <span className="text-right">Volume</span>
+                                </div>
 
-                            {isLoading ? (
-                                <div className="flex flex-col gap-1 py-2">
-                                    {[...Array(STOCKS_PER_PAGE)].map((_, i) => (
-                                        <div key={i} className="h-10 animate-pulse rounded bg-gray-700/40" />
-                                    ))}
-                                </div>
-                            ) : (
-                                <div className={`transition-opacity duration-300 ${fading ? 'opacity-0' : 'opacity-100'}`}>
-                                    {visibleStocks.map((stock) => (
-                                        <div
-                                            key={stock.code}
-                                            className="grid grid-cols-4 gap-4 py-2 border-b border-gray-800/30 items-center hover:bg-white/5 transition-colors"
-                                        >
-                                            <div>
-                                                <span className="text-sm font-bold text-gray-100">{stock.code}</span>
-                                                <span className="block text-[11px] text-gray-500 truncate">{stock.name}</span>
+                                {isLoading ? (
+                                    <div className="flex flex-col gap-1 py-2">
+                                        {[...Array(STOCKS_PER_PAGE)].map((_, i) => (
+                                            <div key={i} className="h-10 animate-pulse rounded bg-gray-700/40" />
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <div className={`transition-opacity duration-300 ${fading ? 'opacity-0' : 'opacity-100'}`}>
+                                        {visibleStocks.map((stock) => (
+                                            <div
+                                                key={stock.code}
+                                                className="grid grid-cols-4 gap-4 py-2 border-b border-gray-800/30 items-center hover:bg-white/5 transition-colors"
+                                            >
+                                                <div>
+                                                    <span className="text-sm font-bold text-gray-100">{stock.code}</span>
+                                                    <span className="block text-[11px] text-gray-500 truncate">{stock.name}</span>
+                                                </div>
+                                                <span className="text-sm font-semibold text-gray-200 text-right">{stock.price.toLocaleString('id-ID')}</span>
+                                                <div className="text-right">
+                                                    <span className={`text-sm font-semibold ${stock.isUp ? 'text-emerald-500' : 'text-rose-500'}`}>
+                                                        {stock.isUp ? '+' : ''}{stock.change.toFixed(0)}
+                                                    </span>
+                                                    <span className={`block text-[11px] ${stock.isUp ? 'text-emerald-500/70' : 'text-rose-500/70'}`}>
+                                                        {stock.isUp ? '+' : ''}{stock.changePct.toFixed(2)}%
+                                                    </span>
+                                                </div>
+                                                <span className="text-xs text-gray-400 text-right">{formatVolume(stock.volume)}</span>
                                             </div>
-                                            <span className="text-sm font-semibold text-gray-200 text-right">{stock.price.toLocaleString('id-ID')}</span>
-                                            <div className="text-right">
-                                                <span className={`text-sm font-semibold ${stock.isUp ? 'text-emerald-500' : 'text-rose-500'}`}>
-                                                    {stock.isUp ? '+' : ''}{stock.change.toFixed(0)}
-                                                </span>
-                                                <span className={`block text-[11px] ${stock.isUp ? 'text-emerald-500/70' : 'text-rose-500/70'}`}>
-                                                    {stock.isUp ? '+' : ''}{stock.changePct.toFixed(2)}%
-                                                </span>
-                                            </div>
-                                            <span className="text-xs text-gray-400 text-right">{formatVolume(stock.volume)}</span>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     </div>
 
                     {/* Articles below stock table */}
-                    {leftArticles.length > 0 && leftArticles.map((post) => (
+                    {leftArticles.length > 0 && (
+                        <div className="flex items-center gap-2 mt-2">
+                            <h3 className="text-base font-bold text-gray-100">Latest Articles</h3>
+                        </div>
+                    )}
+                    {leftArticles.length > 0 && leftArticles.slice(0, 4).map((post) => (
                         <Link
                             key={post.id}
                             href={`/${post.slug}`}
@@ -201,14 +208,14 @@ export default function MarketDashboard({ sideArticles, bottomArticles, leftArti
                     ))}
                 </div>
 
-                {/* Right side: 2 vertically stacked articles */}
+                {/* Right side: 3 vertically stacked articles */}
                 <div className="lg:col-span-4 flex flex-col gap-4">
                     <div className="flex items-center gap-2">
                         <TrendingUp className="h-5 w-5 text-amber-500" />
-                        <h3 className="text-base font-bold text-gray-100">Market Terpopuler</h3>
+                        <h3 className="text-base font-bold text-gray-100">Popular Categories</h3>
                     </div>
                     <div className="flex flex-col gap-4 flex-1">
-                        {sideArticles.map((post) => (
+                        {sideArticles.slice(0, 2).map((post) => (
                             <Link
                                 key={post.id}
                                 href={`/${post.slug}`}

@@ -10,7 +10,7 @@ interface PostCard {
     view_count: number;
     published_at: string;
     published_at_human: string;
-    author: { name: string };
+    author: { name: string; profile_photo?: string | null; bio?: string | null };
     category: { name: string; slug: string } | null;
 }
 
@@ -29,13 +29,9 @@ export default function FeaturedArticleGrid({ title, articles }: Props) {
                     {title}
                     <span className="text-amber-500">&rsaquo;</span>
                 </h2>
-                <Link href="#" className="flex items-center gap-2 text-sm text-gray-400 hover:text-gray-200">
-                    <span className="hidden sm:inline">Lihat Semua</span>
-                    <span className="text-amber-500">&rsaquo;</span>
-                </Link>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 {articles.map((post) => (
                     <div
                         key={post.id}
@@ -66,9 +62,17 @@ export default function FeaturedArticleGrid({ title, articles }: Props) {
                             </h3>
 
                             <div className="flex items-center gap-2 text-sm text-white/80">
-                                <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-700 text-[10px] font-bold text-amber-500">
-                                    {post.author.name.charAt(0)}
-                                </span>
+                                {post.author.profile_photo ? (
+                                    <img
+                                        src={post.author.profile_photo}
+                                        alt={post.author.name}
+                                        className="h-6 w-6 rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <span className="flex h-6 w-6 items-center justify-center rounded-full bg-gray-700 text-[10px] font-bold text-amber-500">
+                                        {post.author.name.charAt(0)}
+                                    </span>
+                                )}
                                 <span>{post.author.name}</span>
                             </div>
 

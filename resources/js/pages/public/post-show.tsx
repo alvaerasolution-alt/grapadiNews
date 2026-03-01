@@ -41,7 +41,7 @@ interface PostCard {
     view_count: number;
     published_at: string;
     published_at_human: string;
-    author: { name: string };
+    author: { name: string; profile_photo?: string | null; bio?: string | null };
     category: { name: string; slug: string } | null;
 }
 
@@ -80,7 +80,7 @@ interface Props {
         published_at: string;
         published_at_human: string;
         published_at_formatted: string;
-        author: { name: string };
+        author: { name: string; profile_photo?: string | null; bio?: string | null };
         category: { name: string; slug: string } | null;
         tags: { name: string; slug: string }[];
     };
@@ -251,8 +251,8 @@ function CommentSection({
                     type="button"
                     onClick={() => setShowForm(!showForm)}
                     className={`flex items-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-all ${showForm
-                            ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
-                            : 'bg-amber-500 text-gray-900 hover:bg-amber-400'
+                        ? 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                        : 'bg-amber-500 text-gray-900 hover:bg-amber-400'
                         }`}
                     id="toggle-comment-form"
                 >
@@ -425,6 +425,7 @@ export default function PostShow({
                 description={post.meta_description || post.excerpt}
                 ogType="article"
                 ogImage={post.og_image || post.featured_image || undefined}
+                ogUrl={articleUrl}
                 jsonLd={jsonLd}
             />
 
@@ -498,7 +499,11 @@ export default function PostShow({
 
                             <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-sm text-gray-400">
                                 <div className="flex items-center gap-1.5">
-                                    <User className="h-4 w-4" />
+                                    {post.author.profile_photo ? (
+                                        <img src={post.author.profile_photo} alt={post.author.name} className="h-5 w-5 rounded-full object-cover" />
+                                    ) : (
+                                        <User className="h-4 w-4" />
+                                    )}
                                     <span>{post.author.name}</span>
                                 </div>
                                 <div className="flex items-center gap-1.5">
@@ -631,7 +636,7 @@ export default function PostShow({
                             className="my-6"
                         />
 
-                        {/* Like & Notification */}
+                        {/* Likes & Notification */}
                         <Separator className="mb-5 bg-gray-800" />
                         <div className="flex flex-wrap items-center gap-3">
                             <LikeButton
@@ -640,6 +645,39 @@ export default function PostShow({
                                 isLiked={post.is_liked}
                             />
                             <NotificationBell />
+                        </div>
+
+                        {/* Author Card */}
+                        <div className="mt-8 rounded-xl border border-gray-800 bg-gray-900/50 p-6">
+                            <div className="flex items-start gap-4 sm:items-center">
+                                <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-800">
+                                    {post.author.profile_photo ? (
+                                        <img
+                                            src={post.author.profile_photo}
+                                            alt={post.author.name}
+                                            className="h-full w-full object-cover"
+                                        />
+                                    ) : (
+                                        <span className="text-xl font-bold text-gray-400">
+                                            {post.author.name.charAt(0).toUpperCase()}
+                                        </span>
+                                    )}
+                                </div>
+                                <div className="flex-1">
+                                    <h4 className="text-lg font-bold text-gray-100">
+                                        Ditulis oleh {post.author.name}
+                                    </h4>
+                                    {post.author.bio ? (
+                                        <p className="mt-1 text-sm text-gray-400 leading-relaxed whitespace-pre-wrap rounded-xl max-w-2xl">
+                                            {post.author.bio}
+                                        </p>
+                                    ) : (
+                                        <p className="mt-1 text-sm text-gray-500 italic">
+                                            Penulis setia GrapadiNews.
+                                        </p>
+                                    )}
+                                </div>
+                            </div>
                         </div>
 
                         {/* Comments Section */}

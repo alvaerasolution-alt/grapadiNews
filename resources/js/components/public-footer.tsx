@@ -82,8 +82,8 @@ export default function PublicFooter() {
             <div className="mx-auto max-w-7xl px-4 py-12">
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                     {/* Brand */}
-                    <div className="lg:col-span-1">
-                        <Link href="/" className="flex items-center gap-2">
+                    <div className="lg:col-span-1 text-center md:text-left">
+                        <Link href="/" className="flex items-center justify-center md:justify-start gap-2">
                             {webSettings?.site_logo ? (
                                 <img
                                     src={webSettings.site_logo}
@@ -102,7 +102,7 @@ export default function PublicFooter() {
                         <p className="mt-3 text-sm leading-relaxed text-gray-400">
                             {footerText}
                         </p>
-                        <div className="mt-4 w-28">
+                        <div className="mt-4 w-28 mx-auto md:mx-0">
                             <a href="https://id.seedbacklink.com/" target="_blank" rel="noopener noreferrer">
                                 <img
                                     title="Seedbacklink"
@@ -114,64 +114,65 @@ export default function PublicFooter() {
                         </div>
                     </div>
 
-                    {/* Information */}
-                    <div>
-                        <h3 className="mb-3 text-sm font-semibold tracking-wider text-white uppercase">
-                            Informasi
-                        </h3>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link
-                                    href="/tentang-kami"
-                                    className="text-sm text-gray-400 transition-colors hover:text-amber-400"
-                                >
-                                    Tentang Kami
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/disclaimer"
-                                    className="text-sm text-gray-400 transition-colors hover:text-amber-400"
-                                >
-                                    Disclaimer
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href="/kerjasama"
-                                    className="text-sm text-gray-400 transition-colors hover:text-amber-400"
-                                >
-                                    Kerjasama
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Categories — dynamic from database */}
-                    <div>
-                        <h3 className="mb-3 text-sm font-semibold tracking-wider text-white uppercase">
-                            Kategori
-                        </h3>
-                        <ul className="space-y-2">
-                            {navCategories?.map((cat) => (
-                                <li key={cat.slug}>
+                    {/* Information + Categories: 2 cols on mobile */}
+                    <div className="grid grid-cols-2 gap-6 md:contents text-center md:text-left">
+                        <div>
+                            <h3 className="mb-3 text-sm font-semibold tracking-wider text-white uppercase">
+                                Informasi
+                            </h3>
+                            <ul className="space-y-2">
+                                <li>
                                     <Link
-                                        href={`/category/${cat.slug}`}
+                                        href="/tentang-kami"
                                         className="text-sm text-gray-400 transition-colors hover:text-amber-400"
                                     >
-                                        {cat.name}
+                                        Tentang Kami
                                     </Link>
                                 </li>
-                            ))}
-                        </ul>
+                                <li>
+                                    <Link
+                                        href="/disclaimer"
+                                        className="text-sm text-gray-400 transition-colors hover:text-amber-400"
+                                    >
+                                        Disclaimer
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/kerjasama"
+                                        className="text-sm text-gray-400 transition-colors hover:text-amber-400"
+                                    >
+                                        Kerjasama
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div>
+                            <h3 className="mb-3 text-sm font-semibold tracking-wider text-white uppercase">
+                                Kategori
+                            </h3>
+                            <ul className="space-y-2">
+                                {navCategories?.map((cat) => (
+                                    <li key={cat.slug}>
+                                        <Link
+                                            href={`/category/${cat.slug}`}
+                                            className="text-sm text-gray-400 transition-colors hover:text-amber-400"
+                                        >
+                                            {cat.name}
+                                        </Link>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     </div>
 
                     {/* Social / Contact */}
-                    <div>
+                    <div className="text-center md:text-left">
                         <h3 className="mb-3 text-sm font-semibold tracking-wider text-white uppercase">
                             Ikuti Kami
                         </h3>
-                        <div className="flex gap-3">
+                        <div className="flex justify-center md:justify-start gap-3">
                             {socialLinks.length > 0 ? (
                                 socialLinks.map((link) => (
                                     <a

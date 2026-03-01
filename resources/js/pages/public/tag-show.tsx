@@ -18,7 +18,7 @@ interface PostCard {
     view_count: number;
     published_at: string;
     published_at_human: string;
-    author: { name: string };
+    author: { name: string; profile_photo?: string | null; bio?: string | null };
     category: { name: string; slug: string } | null;
 }
 
@@ -191,8 +191,8 @@ export default function TagShow({
                                             <Badge
                                                 variant="secondary"
                                                 className={`cursor-pointer transition-colors ${t.slug === tag.slug
-                                                        ? 'bg-amber-600 text-white hover:bg-amber-500'
-                                                        : 'bg-gray-800 text-gray-300 hover:bg-amber-900/40 hover:text-amber-400'
+                                                    ? 'bg-amber-600 text-white hover:bg-amber-500'
+                                                    : 'bg-gray-800 text-gray-300 hover:bg-amber-900/40 hover:text-amber-400'
                                                     }`}
                                             >
                                                 #{t.name}

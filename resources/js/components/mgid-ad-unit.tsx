@@ -4,11 +4,13 @@ import { usePage } from '@inertiajs/react';
 interface MgidAdUnitProps {
     widgetKey: string;
     className?: string;
+    fullHeight?: boolean;
 }
 
 export default function MgidAdUnit({
     widgetKey,
     className = '',
+    fullHeight = false,
 }: MgidAdUnitProps) {
     const { mgidAds } = usePage<{
         mgidAds: {
@@ -41,12 +43,14 @@ export default function MgidAdUnit({
 
     if (!siteId || !widgetId) return null;
 
+    const heightStyle = fullHeight ? {} : { maxHeight: '420px' };
+
     return (
-        <div className={`relative overflow-hidden rounded-xl ${className}`} style={{ maxHeight: '420px' }}>
+        <div className={`relative overflow-hidden rounded-xl ${className}`} style={heightStyle}>
             <div
                 ref={containerRef}
                 className="overflow-hidden"
-                style={{ maxHeight: '420px' }}
+                style={heightStyle}
             />
         </div>
     );

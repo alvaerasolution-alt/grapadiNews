@@ -18,7 +18,7 @@ class CategorySeeder extends Seeder
             ['name' => 'Bisnis', 'description' => 'Berita bisnis, perusahaan, dan industri'],
             ['name' => 'Finansial', 'description' => 'Keuangan, perbankan, dan ekonomi'],
             ['name' => 'Tech', 'description' => 'Teknologi, gadget, dan inovasi digital'],
-            ['name' => 'Insight', 'description' => 'Analisis mendalam dan laporan khusus'],
+            ['name' => 'Insights', 'description' => 'Analisis mendalam dan laporan khusus'],
             ['name' => 'Lifestyle', 'description' => 'Gaya hidup, travel, dan kuliner'],
             ['name' => 'Opini', 'description' => 'Opini, kolom, dan sudut pandang'],
         ];

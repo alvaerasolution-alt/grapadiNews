@@ -1,5 +1,5 @@
 import { Link, usePage } from '@inertiajs/react';
-import { ArrowRight, TrendingUp } from 'lucide-react';
+import { ChevronRight, ExternalLink, ArrowRight, User, TrendingUp } from 'lucide-react';
 import PublicLayout from '@/layouts/public-layout';
 import Seo, { createWebSiteJsonLd } from '@/components/seo';
 import CategoryBadge from '@/components/category-badge';
@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator';
 import type { PaginatedResponse } from '@/types';
 import AdSlot, { type BannerItem } from '@/components/ad-slot';
 import AdPopup from '@/components/ad-popup';
+import MgidAdUnit from '@/components/mgid-ad-unit';
 import CurrencyWidget from '@/components/currency-widget';
 
 // New layout components
@@ -26,7 +27,7 @@ interface PostCard {
     view_count: number;
     published_at: string;
     published_at_human: string;
-    author: { name: string };
+    author: { name: string; profile_photo?: string | null; bio?: string | null };
     category: { name: string; slug: string } | null;
 }
 
@@ -179,12 +180,12 @@ export default function Home({
 
     // Grab some articles for the replacement widgets
     const horizontalArticles = latestPosts.data.slice(0, 3);
-    const featuredArticles = latestPosts.data.slice(3, 5);
+    const featuredArticles = latestPosts.data.slice(3, 6);
     const marketDashboardLeft = marketPosts;
 
-    // The rest of the articles go to the standard feed
-    const firstBatch = latestPosts.data.slice(5, 8);
-    const restBatch = latestPosts.data.slice(8);
+    // The rest of the articles go to the standard feed (max 6)
+    const firstBatch = latestPosts.data.slice(6, 9);
+    const restBatch = latestPosts.data.slice(9, 12);
 
     return (
         <PublicLayout>
@@ -239,7 +240,7 @@ export default function Home({
                         <section className="w-full px-4 pt-4">
                             <div className="grid grid-cols-1 gap-4 lg:grid-cols-12">
                                 {/* Main hero card (Left) */}
-                                <div className="lg:col-span-7 rounded-xl border border-gray-800 bg-[#1A1A1A] overflow-hidden flex flex-col group">
+                                <div className="lg:col-span-8 rounded-xl border border-gray-800 bg-[#1A1A1A] overflow-hidden flex flex-col group">
                                     <Link
                                         href={`/${hero.slug}`}
                                         className="relative aspect-video xl:aspect-[16/10] w-full shrink-0 overflow-hidden bg-gray-800"
@@ -272,6 +273,11 @@ export default function Home({
                                             {hero.excerpt}
                                         </p>
                                         <div className="mt-auto flex items-center gap-2 text-xs text-gray-500">
+                                            {hero.author.profile_photo ? (
+                                                <img src={hero.author.profile_photo} alt={hero.author.name} className="h-5 w-5 rounded-full object-cover" />
+                                            ) : (
+                                                <User className="h-4 w-4" />
+                                            )}
                                             <span>{hero.author.name}</span>
                                             <span>&middot;</span>
                                             <span>{hero.published_at_human}</span>
@@ -280,7 +286,7 @@ export default function Home({
                                 </div>
 
                                 {/* Market Overview Widget (Right) */}
-                                <div className="lg:col-span-5 h-[400px] lg:h-auto">
+                                <div className="lg:col-span-4">
                                     <MarketOverview />
                                 </div>
                             </div>
@@ -296,7 +302,7 @@ export default function Home({
 
                     {/* Pilihan Editor */}
                     <HorizontalArticleList
-                        title="Pilihan Editor"
+                        title="Editor's Picks"
                         articles={horizontalArticles}
                     />
 
@@ -315,17 +321,13 @@ export default function Home({
 
                     {/* Artikel Unggulan */}
                     <FeaturedArticleGrid
-                        title="Artikel Unggulan"
+                        title="Highlights"
                         articles={featuredArticles}
                     />
 
-                    {/* Banner: Below Artikel Unggulan (MGID only or fallback) */}
+                    {/* Banner: Below Artikel Unggulan (MGID) */}
                     <section className="w-full px-4 pt-6">
-                        <AdSlot
-                            banners={[]} // Empty array since it's an extra slot just for MGID
-                            layout="horizontal"
-                            mgidWidgetKey="home_mid_2"
-                        />
+                        <MgidAdUnit widgetKey="home_mid_2" />
                     </section>
 
 
@@ -348,7 +350,7 @@ export default function Home({
                             {/* Latest Articles */}
                             <div className="lg:col-span-3">
                                 <h2 className="mb-6 text-2xl font-bold text-gray-100">
-                                    Berita Terbaru
+                                    Latest Updates
                                 </h2>
 
                                 {/* First batch of articles */}
@@ -418,7 +420,7 @@ export default function Home({
                                         <div className="flex items-center gap-2">
                                             <TrendingUp className="h-5 w-5 text-amber-500" />
                                             <h3 className="text-lg font-bold text-gray-100">
-                                                Trending
+                                                Trending Now
                                             </h3>
                                         </div>
                                         <Separator className="my-4 bg-gray-800" />
@@ -533,6 +535,11 @@ export default function Home({
                             ))}
                         </section>
                     )}
+
+                    {/* MGID Native Content: Bottom of page */}
+                    <section className="w-full px-4 pb-10">
+                        <MgidAdUnit widgetKey="home_bottom" fullHeight />
+                    </section>
                 </div>
 
                 {/* Right Skin Banner */}

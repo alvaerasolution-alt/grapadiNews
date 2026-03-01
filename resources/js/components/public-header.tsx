@@ -320,7 +320,7 @@ export default function PublicHeader() {
                                                         )
                                                     }
                                                 >
-                                                    Login
+                                                    Masuk
                                                 </Link>
                                                 <Link
                                                     href="/register"
@@ -331,7 +331,7 @@ export default function PublicHeader() {
                                                         )
                                                     }
                                                 >
-                                                    Daftar
+                                                    Ikut Menulis
                                                 </Link>
                                             </div>
                                         )}
@@ -410,7 +410,7 @@ export default function PublicHeader() {
                                             size="sm"
                                             className="text-gray-300 hover:bg-white/10 hover:text-white"
                                         >
-                                            Login
+                                            Masuk
                                         </Button>
                                     </Link>
                                     <Link href="/register">
@@ -418,7 +418,7 @@ export default function PublicHeader() {
                                             size="sm"
                                             className="bg-amber-600 text-white hover:bg-amber-700"
                                         >
-                                            Daftar
+                                            Ikut Menulis
                                         </Button>
                                     </Link>
                                 </>

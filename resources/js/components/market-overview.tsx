@@ -101,8 +101,8 @@ export default function MarketOverview() {
                 setError(null);
                 const data = await fetchMarketData(currentRange);
                 setIhsg(data.ihsg);
-                // Show top 3 stocks as "comparisons"
-                setStocks(data.stocks.slice(0, 3));
+                // Show top 6 stocks as "comparisons"
+                setStocks(data.stocks.slice(0, 6));
             } catch {
                 setError('Gagal memuat data market');
             } finally {
@@ -211,7 +211,7 @@ export default function MarketOverview() {
                 </div>
                 {isLoading ? (
                     <div className="flex flex-col gap-3">
-                        {[...Array(3)].map((_, i) => (
+                        {[...Array(6)].map((_, i) => (
                             <div key={i} className="h-8 animate-pulse rounded bg-gray-700/50" />
                         ))}
                     </div>

@@ -10,7 +10,7 @@ interface PostCard {
     view_count: number;
     published_at: string;
     published_at_human: string;
-    author: { name: string };
+    author: { name: string; profile_photo?: string | null; bio?: string | null };
     category: { name: string; slug: string } | null;
 }
 
@@ -29,9 +29,6 @@ export default function HorizontalArticleList({ title, articles }: Props) {
                     {title}
                     <span className="text-amber-500">&rsaquo;</span>
                 </h2>
-                <Link href="#" className="text-sm text-gray-400 hover:text-gray-200">
-                    Lihat Semua Berita
-                </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
