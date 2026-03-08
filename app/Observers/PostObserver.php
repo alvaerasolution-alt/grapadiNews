@@ -6,6 +6,7 @@ use App\Enums\PointType;
 use App\Enums\PostStatus;
 use App\Jobs\SendNewPostNotification;
 use App\Models\Post;
+use App\Models\Setting;
 use App\Services\PointService;
 use App\Services\UnsplashService;
 use Illuminate\Support\Facades\Log;
@@ -89,13 +90,21 @@ class PostObserver
      */
     protected function awardPublishPoints(Post $post): void
     {
+        if (! Setting::get('publish_points_enabled', '1')) {
+            return;
+        }
+
         $user = $post->user;
 
         if (! $user) {
             return;
         }
 
-        $points = 10;
+        $points = (int) Setting::get('points_per_publish', 10);
+
+        if ($points <= 0) {
+            return;
+        }
 
         $this->pointService->award(
             $user,

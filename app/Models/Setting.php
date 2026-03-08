@@ -22,9 +22,9 @@ class Setting extends Model
     public const DEFAULT_FOOTER_TEXT = '© {year} GrapadiNews. All rights reserved.';
 
     public const DEFAULT_ABOUT_US = '';
-    
+
     public const DEFAULT_DISCLAIMER = '';
-    
+
     public const DEFAULT_PARTNERSHIP = '';
 
     /**
@@ -41,6 +41,35 @@ class Setting extends Model
     public function scopeAds($query)
     {
         return $query->where('group', 'ads');
+    }
+
+    /**
+     * Scope for points settings.
+     */
+    public function scopePoints($query)
+    {
+        return $query->where('group', 'points');
+    }
+
+    /**
+     * Get all point system settings as array.
+     */
+    public static function getPointSettings(): array
+    {
+        return Cache::remember('settings.points', 3600, function () {
+            $settings = static::points()->pluck('value', 'key')->toArray();
+
+            return [
+                'publish_points_enabled' => (bool) ($settings['publish_points_enabled'] ?? true),
+                'points_per_publish' => (int) ($settings['points_per_publish'] ?? 10),
+                'view_points_enabled' => (bool) ($settings['view_points_enabled'] ?? true),
+                'views_per_point' => (int) ($settings['views_per_point'] ?? 5000),
+                'max_points_per_article' => (int) ($settings['max_points_per_article'] ?? 10),
+                'rupiah_per_point' => (int) ($settings['rupiah_per_point'] ?? 10000),
+                'max_pending_requests' => (int) ($settings['max_pending_requests'] ?? 1),
+                'redemption_cooldown_hours' => (int) ($settings['redemption_cooldown_hours'] ?? 24),
+            ];
+        });
     }
 
     /**
@@ -110,5 +139,6 @@ class Setting extends Model
         Cache::forget('settings.web');
         Cache::forget('settings.ads');
         Cache::forget('settings.general');
+        Cache::forget('settings.points');
     }
 }

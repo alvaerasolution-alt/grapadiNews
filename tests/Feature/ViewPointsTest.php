@@ -96,3 +96,41 @@ test('does not process unpublished posts', function () {
 
     expect($user->fresh()->points)->toBe(0);
 });
+
+test('view points are not awarded when disabled', function () {
+    Setting::set('view_points_enabled', '0', 'points');
+    Setting::set('views_per_point', 100);
+    Setting::set('max_points_per_article', 10);
+
+    $user = User::factory()->create(['points' => 0]);
+    $post = Post::factory()->create([
+        'user_id' => $user->id,
+        'status' => PostStatus::Published,
+        'view_count' => 500,
+        'points_awarded_from_views' => 0,
+    ]);
+
+    Artisan::call('points:calculate-views');
+
+    expect($user->fresh()->points)->toBe(0);
+    expect($post->fresh()->points_awarded_from_views)->toBe(0);
+});
+
+test('view points are awarded when enabled', function () {
+    Setting::set('view_points_enabled', '1', 'points');
+    Setting::set('views_per_point', 100);
+    Setting::set('max_points_per_article', 10);
+
+    $user = User::factory()->create(['points' => 0]);
+    $post = Post::factory()->create([
+        'user_id' => $user->id,
+        'status' => PostStatus::Published,
+        'view_count' => 300,
+        'points_awarded_from_views' => 0,
+    ]);
+
+    Artisan::call('points:calculate-views');
+
+    expect($user->fresh()->points)->toBe(3);
+    expect($post->fresh()->points_awarded_from_views)->toBe(3);
+});

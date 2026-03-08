@@ -27,6 +27,14 @@ interface DashboardProps {
         reason: string;
         created_at: string;
     }>;
+    pointSettings: {
+        publish_points_enabled: boolean;
+        points_per_publish: number;
+        view_points_enabled: boolean;
+        views_per_point: number;
+        max_points_per_article: number;
+        rupiah_per_point: number;
+    };
 }
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -36,7 +44,19 @@ const breadcrumbs: BreadcrumbItem[] = [
     },
 ];
 
-export default function Dashboard({ stats, recentLogs }: DashboardProps) {
+export default function Dashboard({
+    stats,
+    recentLogs,
+    pointSettings,
+}: DashboardProps) {
+    const formatRupiah = (value: number): string => {
+        return new Intl.NumberFormat('id-ID', {
+            style: 'currency',
+            currency: 'IDR',
+            minimumFractionDigits: 0,
+        }).format(value);
+    };
+
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Dashboard" />
@@ -181,19 +201,50 @@ export default function Dashboard({ stats, recentLogs }: DashboardProps) {
                             <CardTitle>Contributor Tips</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4 text-sm">
-                            <div>
-                                <p className="font-medium">Publishing Bonus</p>
-                                <p className="text-muted-foreground">
-                                    Earn 10 points for every approved article.
-                                </p>
-                            </div>
-                            <div>
-                                <p className="font-medium">View Rewards</p>
-                                <p className="text-muted-foreground">
-                                    Earn 1 point for every 100 views on your
-                                    articles (capped at 10 pts/article).
-                                </p>
-                            </div>
+                            {pointSettings.publish_points_enabled && (
+                                <div>
+                                    <p className="font-medium">
+                                        Publishing Bonus
+                                    </p>
+                                    <p className="text-muted-foreground">
+                                        Earn {pointSettings.points_per_publish}{' '}
+                                        points for every approved article
+                                        (senilai{' '}
+                                        {formatRupiah(
+                                            pointSettings.points_per_publish *
+                                                pointSettings.rupiah_per_point,
+                                        )}
+                                        ).
+                                    </p>
+                                </div>
+                            )}
+                            {pointSettings.view_points_enabled && (
+                                <div>
+                                    <p className="font-medium">View Rewards</p>
+                                    <p className="text-muted-foreground">
+                                        Earn 1 point for every{' '}
+                                        {pointSettings.views_per_point.toLocaleString(
+                                            'id-ID',
+                                        )}{' '}
+                                        views (maks{' '}
+                                        {pointSettings.max_points_per_article}{' '}
+                                        pts/article, senilai{' '}
+                                        {formatRupiah(
+                                            pointSettings.max_points_per_article *
+                                                pointSettings.rupiah_per_point,
+                                        )}
+                                        ).
+                                    </p>
+                                </div>
+                            )}
+                            {!pointSettings.publish_points_enabled &&
+                                !pointSettings.view_points_enabled && (
+                                    <div>
+                                        <p className="text-muted-foreground">
+                                            Sistem poin sedang tidak aktif.
+                                        </p>
+                                    </div>
+                                )}
 
                             <div className="pt-4">
                                 <Link

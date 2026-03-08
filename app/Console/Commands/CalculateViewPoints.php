@@ -31,8 +31,15 @@ class CalculateViewPoints extends Command
     {
         $this->info('Starting view point calculation...');
 
+        // Check if view points are enabled
+        if (! Setting::get('view_points_enabled', '1')) {
+            $this->warn('View points are disabled. Exiting.');
+
+            return;
+        }
+
         $maxPoints = (int) Setting::get('max_points_per_article', 10);
-        $viewsPerPoint = (int) Setting::get('views_per_point', 100);
+        $viewsPerPoint = (int) Setting::get('views_per_point', 5000);
 
         if ($viewsPerPoint <= 0) {
             $this->warn('Views per point setting is 0 or invalid. Exiting.');

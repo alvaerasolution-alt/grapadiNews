@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminBannerController;
 use App\Http\Controllers\Admin\AdminDashboardController;
 use App\Http\Controllers\Admin\AdminPostController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\PointSettingController;
 use App\Http\Controllers\Admin\RedemptionItemController;
 use App\Http\Controllers\Admin\RedemptionRequestController;
 use App\Http\Controllers\Admin\StoreUserController;
@@ -104,6 +105,10 @@ Route::middleware(['auth', 'verified', 'role:admin'])
         Route::post('settings/web', [WebSettingController::class, 'update'])->name('settings.web.update');
         Route::delete('settings/web/logo/delete', [WebSettingController::class, 'destroyLogo'])->name('settings.web.logo.delete');
         Route::delete('settings/web/favicon/delete', [WebSettingController::class, 'destroyFavicon'])->name('settings.web.favicon.delete');
+
+        // Settings - Point System
+        Route::get('settings/points', [PointSettingController::class, 'index'])->name('settings.points');
+        Route::post('settings/points', [PointSettingController::class, 'update'])->name('settings.points.update');
 
         // Settings - Legacy (deprecated, redirect to new)
         Route::get('settings', function () {

@@ -106,6 +106,12 @@ export default function WebSettingsPage({ settings }: Props) {
                         >
                             Web Settings
                         </Link>
+                        <Link
+                            href="/admin/settings/points"
+                            className="px-1 py-4 text-sm font-medium text-muted-foreground hover:text-foreground"
+                        >
+                            Point System
+                        </Link>
                     </nav>
                 </div>
 

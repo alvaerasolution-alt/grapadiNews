@@ -3,9 +3,13 @@
 use App\Enums\PointType;
 use App\Enums\PostStatus;
 use App\Models\Post;
+use App\Models\Setting;
 use App\Models\User;
 
-test('publishing a post awards 10 points to the author', function () {
+test('publishing a post awards points based on setting', function () {
+    Setting::set('publish_points_enabled', '1', 'points');
+    Setting::set('points_per_publish', '10', 'points');
+
     $user = User::factory()->create(['points' => 0]);
     $post = Post::factory()->create([
         'user_id' => $user->id,
@@ -31,7 +35,44 @@ test('publishing a post awards 10 points to the author', function () {
     expect($post->fresh()->points_awarded_on_publish)->toBe(10);
 });
 
+test('publishing a post uses custom points_per_publish setting', function () {
+    Setting::set('publish_points_enabled', '1', 'points');
+    Setting::set('points_per_publish', '25', 'points');
+
+    $user = User::factory()->create(['points' => 0]);
+    $post = Post::factory()->create([
+        'user_id' => $user->id,
+        'status' => PostStatus::Draft,
+        'points_awarded_on_publish' => 0,
+    ]);
+
+    $post->update(['status' => PostStatus::Published]);
+
+    expect($user->fresh()->points)->toBe(25);
+    expect($post->fresh()->points_awarded_on_publish)->toBe(25);
+});
+
+test('publish points are not awarded when disabled', function () {
+    Setting::set('publish_points_enabled', '0', 'points');
+    Setting::set('points_per_publish', '10', 'points');
+
+    $user = User::factory()->create(['points' => 0]);
+    $post = Post::factory()->create([
+        'user_id' => $user->id,
+        'status' => PostStatus::Draft,
+        'points_awarded_on_publish' => 0,
+    ]);
+
+    $post->update(['status' => PostStatus::Published]);
+
+    expect($user->fresh()->points)->toBe(0);
+    expect($post->fresh()->points_awarded_on_publish)->toBe(0);
+});
+
 test('publishing a post again does not award points twice', function () {
+    Setting::set('publish_points_enabled', '1', 'points');
+    Setting::set('points_per_publish', '10', 'points');
+
     $user = User::factory()->create(['points' => 10]);
     $post = Post::factory()->create([
         'user_id' => $user->id,

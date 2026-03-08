@@ -22,8 +22,13 @@ class ViewPointCalculationService
      */
     public function processPost(Post $post): void
     {
+        // Check if view points are enabled
+        if (! Setting::get('view_points_enabled', '1')) {
+            return;
+        }
+
         // Get settings
-        $viewsPerPoint = (int) Setting::get('views_per_point', 100);
+        $viewsPerPoint = (int) Setting::get('views_per_point', 5000);
         $maxPoints = (int) Setting::get('max_points_per_article', 10);
 
         if ($viewsPerPoint <= 0) {
